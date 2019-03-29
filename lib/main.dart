@@ -39,75 +39,120 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Colors.black,
-      body: new Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-//          new Image(
-//            image: new AssetImage("assets/images/minion.jpg"),
-//            fit: BoxFit.cover,
-//            color: const Color(0xFFFFFFFF),
-//            colorBlendMode: BlendMode.darken,
-//          ),
-          new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new FlutterLogo(
-                size: _iconAnimation.value * 100,
+    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+    final emailField = TextField(
+      obscureText: true,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Email",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
+
+    final passwordField = TextField(
+      obscureText: true,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Password",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0,),
+          ),
+      ),
+    );
+
+    final loginButon = Material(
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(30.0),
+
+      color: Colors.blue.shade800,
+      child: MaterialButton(
+        minWidth: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+        },
+        child: Text("Login",
+            textAlign: TextAlign.center,
+            style: style.copyWith(
+                color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+    return Stack(
+
+      children: <Widget>[
+
+    Scaffold(
+    body: Center(
+    child: Container(
+    color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(36.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height:90.0,
+              child: Image.asset(
+                "images/logo.jpeg",
+                fit: BoxFit.contain,
               ),
-              new Form(
-                  child: new Theme(
-                data: new ThemeData(
-                    brightness: Brightness.dark,
-                    primarySwatch: Colors.teal,
-                    inputDecorationTheme: new InputDecorationTheme(
-                        labelStyle:
-                            new TextStyle(color: Colors.teal, fontSize: 20.0))),
-                child: new Container(
-                  padding: const EdgeInsets.all(40.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new TextFormField(
-                        decoration: new InputDecoration(
-                          labelText: "Enter ID",
-
-                        ),
-
-                        keyboardType: TextInputType.number,
-                      ),
-                      new TextFormField(
-                        decoration: new InputDecoration(
-                          labelText: "Enter Password",
-                        ),
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                      ),
-                      new Padding(padding: const EdgeInsets.only(top: 40.0)),
-                      new MaterialButton(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                        height: 50.0,
-                        minWidth: 200,
-                        color: Colors.teal,
-                        textColor: Colors.white,
-                        child: new Text("Login"),
-                        onPressed: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context)=>HomePage())
-                        );
-                        },
-                        splashColor: Colors.redAccent,
-                      )
-                    ],
+            ),
+            SizedBox(height: 25.0),
+            emailField,
+            SizedBox(height: 25.0),
+            passwordField,
+            SizedBox(
+              height: 25.0,
+            ),
+            loginButon,
+            SizedBox(
+              height:10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left:30.0),
+                  child: Text("Dont have an Accout?",style: TextStyle(
+                      fontSize: 15.0,
+                    color: Colors.black,
+                    ),
                   ),
                 ),
-              ))
-            ],
-          )
-        ],
+                SizedBox(width: 50.0,),
+                Container(
+                  margin: EdgeInsets.only(top: 10.0),
+                  height: 30.0,
+                  width: 50.0,
+                  child: GestureDetector(
+                    child: Container(
+//                      height: 20.0,
+//                      width: 10.0,
+                      child: Text('SignUp',style: TextStyle(color: Colors.blue.shade900,
+                        fontSize: 15.0,
+
+                      ),
+                      ),
+                    ),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+
+          ],
+        ),
       ),
+    ),
+    ),
+    ),
+      ],
+
     );
   }
 }
