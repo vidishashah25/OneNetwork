@@ -8,8 +8,7 @@ class HomePage extends StatelessWidget {
         title: new Text('Home Page'),
         actions: <Widget>[
           new IconButton(icon: new Icon(Icons.search), onPressed: null),
-          new IconButton(icon: new Icon(Icons.notifications), onPressed: null),
-          new IconButton(icon: new Icon(Icons.account_circle), onPressed: null)
+          new IconButton(icon: new Icon(Icons.notifications), onPressed: null)
         ],
       ),
 
@@ -35,7 +34,51 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
+      body: cardContain(),
+
 
     );
+  }
+}
+
+
+class cardContain extends StatelessWidget {
+  @override
+  Widget build_card(BuildContext context,int index) {
+    return Center(
+
+      child: Card(
+        elevation: 50,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () { /* ... */ },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const ListTile(
+                leading: Icon(Icons.album),
+                title: Text('Person Name'),
+                subtitle: Text('Deatils About Project'),
+              ),
+              ButtonTheme.bar(
+                child: ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      child: const Text('Like'),
+                      onPressed: (){},
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(itemBuilder: build_card,itemCount: 20);
   }
 }
