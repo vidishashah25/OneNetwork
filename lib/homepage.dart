@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_page/userprofile.dart';
 import 'naviRoute.dart';
 class HomePage extends StatelessWidget {
   @override
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
 
             new ListTile(title: new Text('Page 1'),
                 trailing: new Icon(Icons.arrow_forward),
-                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>new op('Page 1')))),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>UserProfile()))),
             new ListTile(title: new Text('Page 2'),
                 trailing: new Icon(Icons.arrow_forward),
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>new op('Page 2')))
