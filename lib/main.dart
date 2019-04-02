@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'signup.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,28 +21,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
-  AnimationController _iconAnimationController;
-  Animation<double> _iconAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _iconAnimationController = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 500));
-
-    _iconAnimation = new CurvedAnimation(
-        parent: _iconAnimationController, curve: Curves.bounceOut);
-
-    _iconAnimation.addListener(() => this.setState(() {}));
-    _iconAnimationController.forward();
-  }
-
+{
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color : Colors.black87);
     final emailField = TextField(
-      obscureText: true,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -111,33 +95,51 @@ class _LoginPageState extends State<LoginPage>
             SizedBox(
               height:10.0,
             ),
+            Container(
+              margin: EdgeInsets.only(top: 10.0,left:190.0 ),
+              height: 30.0,
+              width: 300.0,
+              child: GestureDetector(
+                child: Container(
+//                      height: 20.0,
+//                      width: 10.0,
+                  child: Text('Forgot Password?',style: TextStyle(color: Colors.blue.shade900,
+                    fontSize: 15.0,
+
+                  ),
+                  ),
+                ),
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+                },
+              ),
+            ),
+
             Row(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left:30.0),
-                  child: Text("Dont have an Accout?",style: TextStyle(
-                      fontSize: 15.0,
+                  margin: EdgeInsets.only(top:70.0,left:30.0),
+                  child: Text("Don't have an Accout?",style: TextStyle(
+                      fontSize: 20.0,
                     color: Colors.black,
                     ),
                   ),
                 ),
-                SizedBox(width: 50.0,),
+                SizedBox(width: 25.0,),
                 Container(
-                  margin: EdgeInsets.only(top: 10.0),
+                  margin: EdgeInsets.only(top: 80.0),
                   height: 30.0,
-                  width: 50.0,
+                  width: 70.0,
                   child: GestureDetector(
                     child: Container(
-//                      height: 20.0,
-//                      width: 10.0,
                       child: Text('SignUp',style: TextStyle(color: Colors.blue.shade900,
-                        fontSize: 15.0,
+                        fontSize: 20.0,
 
                       ),
                       ),
                     ),
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+                      Navigator.push(context, MaterialPageRoute(builder:(context)=>signUp()));
                     },
                   ),
                 ),

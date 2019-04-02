@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
 class cardContain extends StatelessWidget {
   @override
   Widget build_card(BuildContext context,int index) {
