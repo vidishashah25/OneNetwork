@@ -66,12 +66,14 @@ class _UserProfileState extends State<UserProfile> {
             child: Container(color: Colors.blue.withOpacity(0.8)),
             clipper: getClipper(),
           ),
-          SafeArea(
-              child: IconButton(
-            icon: Icon(Icons.edit, size: 30.0),
-            onPressed: () => {},
-            padding: EdgeInsets.only(left: 309.0, right: 5.0, top: 9.0),
-          )),
+          Positioned(
+//            bottom:,
+            child: FloatingActionButton(
+                materialTapTargetSize:  MaterialTapTargetSize.shrinkWrap,
+                onPressed: null,
+                child: Icon(Icons.edit,color: Colors.grey,),
+            ),
+          ),
           Positioned(
             width: 350.0,
             top: MediaQuery.of(context).size.height / 8,
@@ -191,7 +193,13 @@ class _UserProfileState extends State<UserProfile> {
                                       child: MaterialButton(
                                           onPressed: null,
                                         minWidth: 25.0,
-                                        color: Colors.white70,
+                                        color: Colors.grey,
+                                        child: Text('Download',style: TextStyle(
+                                        color: Colors.black,
+
+                                          ),
+                                        ),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(46.0)),
                                       ),
                                   ),
 

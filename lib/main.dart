@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/userprofile.dart';
+import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
-
+import 'package:progress_hud/progress_hud.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -23,10 +26,28 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
 {
+
+
+  bool login=false;
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  Future<String> _getSignin(String text, String text2) async {
+          Dio dio= new Dio();
+          var url = await dio.post("/test", data: {"username": text, "password": text2});
+         var responseJson = json.decode(url.toString());
+         var result= responseJson["error"];
+         setState(() {
+           if(result.equals("true")){
+                login=true;
+           }
+         });
+        return result;
+  }
   @override
   Widget build(BuildContext context) {
     TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color : Colors.black87);
     final emailField = TextField(
+      controller: emailController,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -36,6 +57,7 @@ class _LoginPageState extends State<LoginPage>
     );
 
     final passwordField = TextField(
+      controller: passwordController,
       obscureText: true,
       style: style,
       decoration: InputDecoration(
@@ -56,7 +78,18 @@ class _LoginPageState extends State<LoginPage>
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+          _getSignin(emailController.text,passwordController.text);
+          if(login==true){Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));}
+          else{
+                ProgressHUD(
+                  containerColor: Colors.black87,
+                  color: Colors.white70,
+                  backgroundColor: Colors.grey,
+                  borderRadius: 5.0,
+                  text: 'varifying....',
+                );
+          }
+
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -69,6 +102,7 @@ class _LoginPageState extends State<LoginPage>
       children: <Widget>[
 
     Scaffold(
+    key:GlobalKey(),
     body: Center(
     child: Container(
     color: Colors.white,
@@ -158,6 +192,8 @@ class _LoginPageState extends State<LoginPage>
 
     );
   }
+
+
 }
 
 
