@@ -48,12 +48,16 @@ class _NotifyState extends State<Notify> {
               return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index){
-                return ListTile(
-                  //leading: CircleAvatar(
-                  //   backgroundImage: 
-                  // ),
-                  title: Text(snapshot.data[index].title),
-                  subtitle: Text(snapshot.data[index].body),
+                return Card(
+                  child: Column(
+                    children: <Widget>[
+                     Image(
+                        image: NetworkImage("")
+                     ),
+                      Text(snapshot.data[index].title),
+                      Text(snapshot.data[index].body), 
+                    ],
+                  ),
                 );
               },
             );
