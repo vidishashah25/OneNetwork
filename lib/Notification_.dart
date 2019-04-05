@@ -13,13 +13,13 @@ class Notify extends StatefulWidget {
 class _NotifyState extends State<Notify> {
 
   Future<List<User>> _getUsers() async {
-    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
+    var data = await http.get('https://jsonplaceholder.typicode.com/users');
     var JsonData = json.decode(data.body);
 
     List<User> users = [];
 
     for(var u in JsonData){
-      User user = User(u["userId"], u["id"],u["title"],u["body"]);
+      User user = User(u["id"], u["name"],u["username"],u["email"]);
       users.add(user);
     }
 
@@ -48,16 +48,18 @@ class _NotifyState extends State<Notify> {
               return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index){
-                return Card(
-                  child: Column(
-                    children: <Widget>[
-                     Image(
-                        image: NetworkImage("")
-                     ),
-                      Text(snapshot.data[index].title),
-                      Text(snapshot.data[index].body), 
-                    ],
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(""),
                   ),
+                  title: Text(snapshot.data[index].name),
+                  subtitle: Text(snapshot.data[index].email),
+                  onTap: (){
+                    Navigator.push(context, 
+                      new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
+                    );
+                  },
+
                 );
               },
             );
@@ -70,14 +72,29 @@ class _NotifyState extends State<Notify> {
 }
 
 class User{
-  final int userId;
+  
   final int id;
-  final String title;
-  final String body;
+  final String name;
+  final String username;
+  final String email;
 
-  User(this.userId, this.id, this.title, this.body);
+  User(this.id, this.name, this.username, this.email);
 }
 
-// onPressed: (){
-//   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => notification()));
-// },
+class DetailPage extends StatelessWidget {
+  final User user;
+  DetailPage(this.user);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(user.name),
+      ),
+      body: Center(
+        child: Text("loading...")
+      ),
+      
+    );
+  }
+}

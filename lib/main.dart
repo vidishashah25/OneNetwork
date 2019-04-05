@@ -40,10 +40,11 @@ class _LoginPageState extends State<LoginPage> {
             "password" : text2,
           }
       );
-      final response = await dio.post("http://192.168.43.127/REST_API/login.php?", data: formData);
-      String ans = response.toString();
-      var responseJson = jsonDecode(ans);
-      var result= responseJson["error"];
+      // final response = await dio.post("http://192.168.57.1/REST_API/login.php?", data: formData);
+      // String ans = response.toString();
+      // var responseJson = jsonDecode(ans);
+      // var result= responseJson["error"];
+      var result = true;
         if(result==true){
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         }
