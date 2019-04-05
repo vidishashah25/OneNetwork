@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
 import 'naviRoute.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,7 +11,9 @@ class HomePage extends StatelessWidget {
         title: new Text('Home Page'),
         actions: <Widget>[
           new IconButton(icon: new Icon(Icons.search), onPressed: null),
-          new IconButton(icon: new Icon(Icons.notifications), onPressed: null)
+          new IconButton(icon: new Icon(Icons.notifications), onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Notify()));
+          })
         ],
       ),
 
