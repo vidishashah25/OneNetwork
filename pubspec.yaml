@@ -21,6 +21,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: any
   cached_network_image:
+  progress_hud: ^1.1.0
+  dio: 2.1.0
 
 dev_dependencies:
   flutter_test:
