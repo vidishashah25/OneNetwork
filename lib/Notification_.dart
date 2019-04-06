@@ -31,7 +31,7 @@ class _NotifyState extends State<Notify> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notificaiton"),
+        title: Text("Notification"),
       ),
       body: Container(
         child:FutureBuilder(
@@ -56,10 +56,10 @@ class _NotifyState extends State<Notify> {
                   subtitle: Text(snapshot.data[index].email),
                   onTap: (){
                     Navigator.push(context, 
-                      new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
+                      //new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
+                      new MaterialPageRoute(builder:(context) => SubNotify())
                     );
                   },
-
                 );
               },
             );
@@ -71,6 +71,7 @@ class _NotifyState extends State<Notify> {
   }
 }
 
+//All Notification
 class User{
   
   final int id;
@@ -80,10 +81,38 @@ class User{
 
   User(this.id, this.name, this.username, this.email);
 }
+// Selected User Data
+class SingleUser{
+  
+final String title;
+final String body;
+SingleUser(this.title, this.body);
+
+  // final String projectName;
+  // final String projectDetails;
+  // final String student;
+
+  // SingleUser(this.projectName, this.projectDetails, this.student);
+}
 
 class DetailPage extends StatelessWidget {
   final User user;
   DetailPage(this.user);
+
+  Future<List<SingleUser>> _getUserData() async {
+    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
+    var JsonData = json.decode(data.body);
+
+    List<SingleUser> users = [];
+
+    for(var u in JsonData){
+      SingleUser user = SingleUser(u["title"],u["body"]);
+      users.add(user);
+    }
+
+    print(users.length);
+    return users;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +121,40 @@ class DetailPage extends StatelessWidget {
         title: Text(user.name),
       ),
       body: Center(
-        child: Text("loading...")
+        // child: Text("loading...")
+        child:FutureBuilder(
+          future: _getUserData(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if(snapshot.data ==  null){
+              return Container(
+                child: Center(
+                  child: Text("Loading...")
+                )
+              );
+            }
+            else{
+              return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index){
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(""),
+                  ),
+                  title: Text(snapshot.data[index].title),
+                  subtitle: Text(snapshot.data[index].body),
+                  onTap: (){
+                    //Navigator.push(context, 
+                      // new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
+                      //new MaterialPageRoute(builder:(context)=> SubNotify())
+                  // );
+                  },
+                );
+              },
+            );
+           }             
+          },
+        ),
       ),
-      
     );
   }
 }

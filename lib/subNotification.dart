@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class notification extends StatefulWidget {
+class SubNotify extends StatefulWidget {
   @override
-  _notificationState createState() => _notificationState();
+  _SubNotifyState createState() => _SubNotifyState();
 }
 
-class _notificationState extends State<notification> {
+class _SubNotifyState extends State<SubNotify> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,3 +59,4 @@ class _notificationState extends State<notification> {
     );
   }
 }
+
