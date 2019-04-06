@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class op extends StatelessWidget {
 
   final String mtxt;
-
+  
   op(this.mtxt);
 
   @override
