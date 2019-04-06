@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_page/changeuserprofile.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -66,12 +67,14 @@ class _UserProfileState extends State<UserProfile> {
             child: Container(color: Colors.blue.withOpacity(0.8)),
             clipper: getClipper(),
           ),
-          Positioned(
+            Container(
 //            bottom:,
+              alignment: FractionalOffset.bottomRight,
+              padding: EdgeInsets.only(bottom: 20.0,right:20.0),
             child: FloatingActionButton(
                 materialTapTargetSize:  MaterialTapTargetSize.shrinkWrap,
-                onPressed: null,
-                child: Icon(Icons.edit,color: Colors.grey,),
+                onPressed: ()=>{Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ChangeUserProfile()))},
+                child: Icon(Icons.edit,color: Colors.white,),
             ),
           ),
           Positioned(
@@ -209,23 +212,7 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                 ),
-//                            Container(
-//                            height: 30.0,
-//                            width: 95.0,
-//                            child: Material(
-//                                borderRadius: BorderRadius.circular(20.0),
-//                                shadowColor: Colors.redAccent,
-//                                color: Colors.red,
-//                                elevation: 7.0,
-//                                child: GestureDetector(
-//                                    onTap: ()=>{},
-//                                    child: Center(
-//                                        child: Text('Logout', style: TextStyle(color: Colors.white, fontFamily: 'Montserrat'),),
-//
-//                                    ),
-//                                ),
-//                            ),
-//                        ),
+//                           
               ],
             ),
           ),
