@@ -1,15 +1,13 @@
-# login_page
+# One Network
+One Network is the application that provide DA-IICT students to take internship unnder professor so that student can colloborate with other students and also suggest their idea to the professors and also students can apply to the professor's project.
 
-A new Flutter application.
+</br>
+</br>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+Application is buit using Flutter
 
 A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
