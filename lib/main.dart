@@ -36,19 +36,21 @@ class _LoginPageState extends State<LoginPage> {
             Dio dio= new Dio();
       FormData formData =new FormData.from(
           {
-            "username" : text,
+            "userid" : text,
             "password" : text2,
           }
       );
-      // final response = await dio.post("http://192.168.57.1/REST_API/login.php?", data: formData);
-      // String ans = response.toString();
-      // var responseJson = jsonDecode(ans);
-      // var result= responseJson["error"];
-      var result = true;
-        if(result==true){
+       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+       String ans = response.toString();
+       print(ans);
+       var responseJson = jsonDecode(ans);
+       String result= responseJson["message"];
+       print(result);
+//      var result = true;
+        if(result=="Logged in Successfully."){
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         }
-      return result.toString();
+      return result;
     }
 
 
