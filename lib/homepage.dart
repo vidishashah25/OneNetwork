@@ -39,50 +39,27 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      body: cardContain(),
+      body: feed(),
 
 
     );
   }
 }
 
-class cardContain extends StatelessWidget {
+class feed extends StatefulWidget {
   @override
-  Widget build_card(BuildContext context,int index) {
-    return Center(
+  _feedState createState() => _feedState();
+}
 
-      child: Card(
-        elevation: 50,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () { /* ... */ },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const ListTile(
-                leading: Icon(Icons.album),
-                title: Text('Person Name'),
-                subtitle: Text('Deatils About Project'),
-              ),
-              ButtonTheme.bar(
-                child: ButtonBar(
-                  children: <Widget>[
-                    FlatButton(
-                      child: const Text('Like'),
-                      onPressed: (){},
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+class _feedState extends State<feed> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: build_card,itemCount: 20);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Feeds"),
+      ),
+
+
+    );
   }
 }
