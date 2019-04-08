@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'homepage.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class signUp extends StatefulWidget {
   @override
@@ -9,18 +13,59 @@ class signUp extends StatefulWidget {
 class _signUpState extends State<signUp> {
   @override
   Widget build(BuildContext context) {
+    bool signup;
 
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+    TextEditingController firstnameControl = new TextEditingController();
+    TextEditingController lastnameControl = new TextEditingController();
+    TextEditingController useridControl = new TextEditingController();
+    TextEditingController passwordControl = new TextEditingController();
+
+
+    Future<String> _getsignup(String tx1,String tx2,String tx3,String tx4) async
+    {
+      Dio dio = new Dio();
+      FormData formdata = new FormData.from({
+        "firstname":tx1,
+        "lastname":tx2,
+        "userid":tx3,
+        "pass":tx4
+      });
+
+      final response = await dio
+          .post("http://192.168.43.176/REST_API/signup.php", data: formdata);
+
+      String ans = response.toString();
+      print(ans);
+
+      var responseJson = jsonDecode(ans);
+
+      var result = responseJson["error"];
+
+      if (result == "true") {
+        print(result);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+
+      return result.toString();
+    }
+
+
+    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
     final first_name = TextField(
+      controller: firstnameControl,
       style: style,
       decoration: InputDecoration(
+
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "First Name",
+
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
     final last_name = TextField(
+      controller: lastnameControl,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -30,6 +75,7 @@ class _signUpState extends State<signUp> {
     );
 
     final user_id = TextField(
+      controller: useridControl,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -39,6 +85,7 @@ class _signUpState extends State<signUp> {
     );
 
     final password_sign = TextField(
+      controller: passwordControl,
       obscureText: true,
       style: style,
       decoration: InputDecoration(
@@ -57,10 +104,23 @@ class _signUpState extends State<signUp> {
 
       color: Colors.blue.shade800,
       child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
+        minWidth: MediaQuery
+            .of(context)
+            .size
+            .width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder:(context)=>HomePage()));
+          Fluttertoast.showToast(
+              msg: "Registered",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.grey,
+              textColor: Colors.black87,
+              fontSize: 16.0
+          );
+          _getsignup(firstnameControl.text, lastnameControl.text, useridControl.text,
+              passwordControl.text);
         },
         child: Text("Sign Up",
             textAlign: TextAlign.center,
@@ -78,26 +138,28 @@ class _signUpState extends State<signUp> {
         child: Container(
           color: Colors.white,
           child: Padding(padding: const EdgeInsets.all(36.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 25.0),
-              first_name,
-              SizedBox(height: 25.0),
-              last_name,
-              SizedBox(height: 25.0),
-              user_id,
-              SizedBox(height: 25.0),
-              password_sign,
-              SizedBox(height: 25.0),
-              signupButon
-            ],
-          ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 25.0),
+                first_name,
+                SizedBox(height: 25.0),
+                last_name,
+                SizedBox(height: 25.0),
+                user_id,
+                SizedBox(height: 25.0),
+                password_sign,
+                SizedBox(height: 25.0),
+                signupButon
+              ],
+            ),
           ),
         ),
       ),
 
     );
   }
-}
+  }
+
+

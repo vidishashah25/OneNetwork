@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: new LoginPage(),
         theme: new ThemeData(primarySwatch: Colors.blue));
   }
@@ -25,40 +25,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   Widget build(BuildContext context) {
-
-    bool login=false;
+    bool login = false;
     TextEditingController emailController = new TextEditingController();
     TextEditingController passwordController = new TextEditingController();
     Future<String> _getSignin(String text, String text2) async {
-            Dio dio= new Dio();
-      FormData formData =new FormData.from(
-          {
-            "username" : text,
-            "password" : text2,
-          }
-      );
-      final response = await dio.post("http://192.168.43.127/REST_API/login.php?", data: formData);
+      Dio dio = new Dio();
+      FormData formData = new FormData.from({
+        "username": text,
+        "password": text2,
+      });
+      final response = await dio
+          .post("http://192.168.43.176/REST_API/login.php?", data: formData);
       String ans = response.toString();
       var responseJson = jsonDecode(ans);
-      var result= responseJson["error"];
-        if(result==true){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-        }
+      var result = responseJson["error"];
+      if (result == true) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
       return result.toString();
     }
 
+    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color:Colors.black87);
 
-
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
-    final imageField= Image(
-        image: AssetImage("images/logo.jpeg"),
-        fit: BoxFit.contain,
-        height: MediaQuery.of(context).size.height/4,
-        width:  MediaQuery.of(context).size.width/2,
+    final imageField = Image(
+      image: AssetImage("images/logo.jpeg"),
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height / 4,
+      width: MediaQuery.of(context).size.width / 2,
     );
 
     final emailField = TextField(
@@ -69,8 +65,7 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Email",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
     final passwordField = TextField(
@@ -81,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Password",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
     final loginButon = Material(
@@ -92,26 +87,22 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          _getSignin(emailController.text,passwordController.text);
-          if(login){}
+          _getSignin(emailController.text, passwordController.text);
+          if (login) {}
         },
         child: Text("Login",
             textAlign: TextAlign.center,
             style: style.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
-
       ),
     );
-
-
-
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            color:Colors.white,
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
               child: Column(
@@ -120,26 +111,29 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   imageField,
                   emailField,
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   passwordField,
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   loginButon,
                   SizedBox(
                     height: 15.0,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.width/50),
+                  SizedBox(height: MediaQuery.of(context).size.width / 50),
                   FlatButton(
-                    onPressed: ()=>{}, child: Text("Forgot Password ?"),
+                    onPressed: () => {},
+                    child: Text("Forgot Password ?"),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   FlatButton(
-                      onPressed: ()=>{}, child: Text("Don't Have an account?  SignUp"),
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => signUp()));
+                    },
+                    child: Text("Don't Have an account?  SignUp"),
                   ),
                 ],
               ),
-
             ),
-
           ),
         ),
       ),
