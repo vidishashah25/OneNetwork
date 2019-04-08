@@ -44,10 +44,11 @@ class _LoginPageState extends State<LoginPage> {
        String ans = response.toString();
        print(ans);
        var responseJson = jsonDecode(ans);
-       String result= responseJson["message"];
+       var result= responseJson["error"];
        print(result);
 //      var result = true;
-        if(result=="Logged in Successfully."){
+      login=true;
+        if(result=="false"){
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         }
       return result;
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
 
     final imageField= Image(
         image: AssetImage("images/logo.jpeg"),
@@ -96,7 +97,9 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           _getSignin(emailController.text,passwordController.text);
-          if(login){}
+//          if(login){
+//            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+//          }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -136,7 +139,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   FlatButton(
-                      onPressed: ()=>{}, child: Text("Don't Have an account?  SignUp"),
+                      onPressed: (){
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>signUp()));
+                      },
+                    child: Text("Don't Have an account?  SignUp"),
                   ),
                 ],
               ),

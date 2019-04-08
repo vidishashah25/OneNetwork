@@ -73,7 +73,7 @@ class _UserProfileState extends State<UserProfile> {
               padding: EdgeInsets.only(bottom: 20.0,right:20.0),
             child: FloatingActionButton(
                 materialTapTargetSize:  MaterialTapTargetSize.shrinkWrap,
-                onPressed: ()=>{Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ChangeUserProfile()))},
+//                onPressed: ()=>{Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ChangeUserProfile()));},
                 child: Icon(Icons.edit,color: Colors.white,),
             ),
           ),
