@@ -6,3 +6,16 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
+class interest extends StatefulWidget {
+  @override
+  _interestState createState() => _interestState();
+}
+
+class _interestState extends State<interest> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+    );
+  }
+}
