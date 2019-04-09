@@ -5,6 +5,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
+//All Notification
+
+class Project{
+  final String title;
+  final String body;
+
+  Project(this.title, this.body); 
+}
+// Notification-Class end....
+
+
 class Notify extends StatefulWidget {
   @override
   _NotifyState createState() => _NotifyState();
@@ -12,19 +23,19 @@ class Notify extends StatefulWidget {
 
 class _NotifyState extends State<Notify> {
 
-  Future<List<User>> _getUsers() async {
-    var data = await http.get('https://jsonplaceholder.typicode.com/users');
+  Future<List<Project>> _getProjects() async {
+    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
     var JsonData = json.decode(data.body);
 
-    List<User> users = [];
+    List<Project> projects = [];
 
     for(var u in JsonData){
-      User user = User(u["id"], u["name"],u["username"],u["email"]);
-      users.add(user);
+      Project project = Project(u["title"],u["body"]);
+      projects.add(project);
     }
 
-    print(users.length);
-    return users;
+    print(projects.length);
+    return projects;
   }
 
   @override
@@ -35,7 +46,7 @@ class _NotifyState extends State<Notify> {
       ),
       body: Container(
         child:FutureBuilder(
-          future: _getUsers(),
+          future: _getProjects(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if(snapshot.data ==  null){
               return Container(
@@ -52,12 +63,12 @@ class _NotifyState extends State<Notify> {
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(""),
                   ),
-                  title: Text(snapshot.data[index].name),
-                  subtitle: Text(snapshot.data[index].email),
+                  title: Text(snapshot.data[index].title),
+                  subtitle: Text(snapshot.data[index].body),
                   onTap: (){
                     Navigator.push(context, 
-                      //new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
-                      new MaterialPageRoute(builder:(context) => SubNotify())
+                      // new MaterialPageRoute(builder:(context) => SubNotify(snapshot.data[index]))
+                      new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
                     );
                   },
                 );
@@ -71,7 +82,6 @@ class _NotifyState extends State<Notify> {
   }
 }
 
-//All Notification
 class User{
   
   final int id;
@@ -81,32 +91,20 @@ class User{
 
   User(this.id, this.name, this.username, this.email);
 }
-// Selected User Data
-class SingleUser{
-  
-final String title;
-final String body;
-SingleUser(this.title, this.body);
-
-  // final String projectName;
-  // final String projectDetails;
-  // final String student;
-
-  // SingleUser(this.projectName, this.projectDetails, this.student);
-}
 
 class DetailPage extends StatelessWidget {
-  final User user;
-  DetailPage(this.user);
+  
+  final Project project;
+  DetailPage(this.project);
 
-  Future<List<SingleUser>> _getUserData() async {
-    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
+  Future<List<User>> _getUserData() async {
+    var data = await http.get('https://jsonplaceholder.typicode.com/users');
     var JsonData = json.decode(data.body);
 
-    List<SingleUser> users = [];
+    List<User> users = [];
 
     for(var u in JsonData){
-      SingleUser user = SingleUser(u["title"],u["body"]);
+      User user = User(u["id"], u["name"], u["username"], u["email"]);
       users.add(user);
     }
 
@@ -118,7 +116,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.name),
+        title: Text(""),
       ),
       body: Center(
         // child: Text("loading...")
@@ -140,12 +138,13 @@ class DetailPage extends StatelessWidget {
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(""),
                   ),
-                  title: Text(snapshot.data[index].title),
-                  subtitle: Text(snapshot.data[index].body),
+                  title: Text(snapshot.data[index].name),
+                  subtitle: Text(snapshot.data[index].email),
+                  
                   onTap: (){
-                    //Navigator.push(context, 
-                      // new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
-                      //new MaterialPageRoute(builder:(context)=> SubNotify())
+                  //   Navigator.push(context, 
+                  //    // new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
+                  //     new MaterialPageRoute(builder:(context)=> SubNotify(snapshot.data[index]))
                   // );
                   },
                 );
