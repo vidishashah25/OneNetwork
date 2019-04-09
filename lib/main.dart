@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             "password" : text2,
           }
       );
-       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+       final response = await dio.post("https://one-network.000webhostapp.com/api/login2.php", data: formData);
        String ans = response.toString();
        print(ans);
        var responseJson = jsonDecode(ans);
