@@ -20,14 +20,14 @@ class _UpdateResumeState extends State<UpdateResume> {
             margin: EdgeInsets.only(left: 65.0,right: 65.0),
             color: Colors.blue,
             child: FlatButton(
-                onPressed: ()=>{_getFile()},
+                onPressed: ()=>_getFile(),
                 child: Text('Upload',style: TextStyle(color: Colors.white),),
             ),
           ),
           FlatButton(
-          onPressed: ()=>{
+          onPressed: ()=>
           Navigator.of(context).pop(),
-          },
+
           child: Text('Ok'),
           ),
         ],
