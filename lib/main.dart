@@ -32,21 +32,21 @@ class _LoginPageState extends State<LoginPage> {
     bool login=false;
     TextEditingController emailController = new TextEditingController();
     TextEditingController passwordController = new TextEditingController();
-    Future<String> _getSignin(String text, String text2) async {
-            Dio dio= new Dio();
-      FormData formData =new FormData.from(
-          {
-            "userid" : text,
-            "password" : text2,
-          }
-      );
-       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
-       String ans = response.toString();
-       print(ans);
-       var responseJson = jsonDecode(ans);
-       var result= responseJson["error"];
-       print(result);
-//      var result = true;
+    Future<bool> _getSignin(String text, String text2) async {
+      //       Dio dio= new Dio();
+      // FormData formData =new FormData.from(
+      //     {
+      //       "userid" : text,
+      //       "password" : text2,
+      //     }
+      // );
+      //  final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+      //  String ans = response.toString();
+      //  print(ans);
+      //  var responseJson = jsonDecode(ans);
+      //  var result= responseJson["error"];
+      //  print(result);
+     var result = true;
       login=true;
         if(result=="false"){
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
@@ -96,10 +96,10 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          _getSignin(emailController.text,passwordController.text);
-//          if(login){
-//            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-//          }
+        // _getSignin(emailController.text,passwordController.text);
+        // if(login){
+           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+        // }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
