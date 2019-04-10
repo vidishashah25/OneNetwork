@@ -3,21 +3,6 @@ import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
 import 'naviRoute.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main.dart';
-
-/*
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-
- */
-
-
-
-
 
 
 class HomePage extends StatefulWidget {
