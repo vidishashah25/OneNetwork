@@ -24,6 +24,8 @@ dependencies:
   progress_hud: ^1.1.0
   dio: 2.1.0
   fluttertoast: ^3.0.3
+  file_picker: ^1.3.3
+
 
 dev_dependencies:
   flutter_test:
