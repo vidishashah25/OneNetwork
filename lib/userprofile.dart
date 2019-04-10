@@ -159,6 +159,7 @@ class _UserProfileState extends State<UserProfile> {
                             ),
                             SizedBox(height: 20.0,),
                             Container(
+
                               decoration: BoxDecoration(
                                   border: Border(bottom: BorderSide(color: Colors.blue))
                               ),
