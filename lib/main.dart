@@ -6,14 +6,15 @@ import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: new LoginPage(),
         theme: new ThemeData(primarySwatch: Colors.blue));
   }
@@ -25,56 +26,59 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  SharedPreferences prefs;
+
+  TextEditingController useridController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  bool login = false;
 
   @override
   Widget build(BuildContext context) {
-
-    bool login=false;
-    TextEditingController emailController = new TextEditingController();
-    TextEditingController passwordController = new TextEditingController();
     Future<String> _getSignin(String text, String text2) async {
-            Dio dio= new Dio();
-      FormData formData =new FormData.from(
-          {
-            "userid" : text,
-            "password" : text2,
-          }
-      );
+      Dio dio = new Dio();
+      FormData formData = new FormData.from({
+        "userid": text,
+        "password": text2,
+      });
+
        final response = await dio.post("https://one-network.000webhostapp.com/api/login2.php", data: formData);
        String ans = response.toString();
        print(ans);
        var responseJson = jsonDecode(ans);
        var result= responseJson["error"];
        print(result);
-//      var result = true;
       login=true;
         if(result=="false"){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+      prefs = await SharedPreferences.getInstance();
+      prefs.setString("userid", useridController.text);
+      prefs.commit();
+
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
         }
-      return result;
+
+      return null;
     }
 
+    TextStyle style = TextStyle(
+        fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black87);
 
-
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
-
-    final imageField= Image(
-        image: AssetImage("images/logo.jpeg"),
-        fit: BoxFit.contain,
-        height: MediaQuery.of(context).size.height/4,
-        width:  MediaQuery.of(context).size.width/2,
+    final imageField = Image(
+      image: AssetImage("images/logo.jpeg"),
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height / 4,
+      width: MediaQuery.of(context).size.width / 2,
     );
 
-    final emailField = TextField(
-      controller: emailController,
+    final useridField = TextField(
+      controller: useridController,
       obscureText: false,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Email",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
     final passwordField = TextField(
@@ -85,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Password",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
     final loginButon = Material(
@@ -96,28 +100,24 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          _getSignin(emailController.text,passwordController.text);
+          _getSignin(useridController.text, passwordController.text);
 //          if(login){
-//            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+//          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
 //          }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
             style: style.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
-
       ),
     );
-
-
-  
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            color:Colors.white,
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
               child: Column(
@@ -125,30 +125,30 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   imageField,
-                  emailField,
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  useridField,
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   passwordField,
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   loginButon,
                   SizedBox(
                     height: 15.0,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.width/50),
+                  SizedBox(height: MediaQuery.of(context).size.width / 50),
                   FlatButton(
-                    onPressed: ()=>{}, child: Text("Forgot Password ?"),
+                    onPressed: () => {},
+                    child: Text("Forgot Password ?"),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.width/15),
+                  SizedBox(height: MediaQuery.of(context).size.width / 15),
                   FlatButton(
-                      onPressed: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>signUp()));
-                      },
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => signUp()));
+                    },
                     child: Text("Don't Have an account?  SignUp"),
                   ),
                 ],
               ),
-
             ),
-
           ),
         ),
       ),

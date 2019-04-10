@@ -2,13 +2,61 @@ import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
 import 'naviRoute.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 
-class HomePage extends StatelessWidget {
+/*
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+ */
+
+
+
+
+
+
+class HomePage extends StatefulWidget {
+
+
+
+  @override
+  HomePageState createState() {
+    return new HomePageState();
+  }
+}
+
+class HomePageState extends State<HomePage> {
+
+  SharedPreferences prefs;
+
+  var userid;
+
+
+    getdata() async{
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    getdata();
+    print(userid);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Home Page'),
+        title: new Text(userid),
         actions: <Widget>[
           new IconButton(icon: new Icon(Icons.search), onPressed: null),
           new IconButton(icon: new Icon(Icons.notifications), onPressed: (){
