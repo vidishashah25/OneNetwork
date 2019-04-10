@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_page/changeuserprofile.dart';
+import 'package:login_page/updateresume.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -15,6 +15,9 @@ class _UserProfileState extends State<UserProfile> {
   void initState() {
     getusername();
   }
+
+
+
 
   Widget_getImage() {
     if (userprofile == null) {
@@ -67,16 +70,7 @@ class _UserProfileState extends State<UserProfile> {
             child: Container(color: Colors.blue.withOpacity(0.8)),
             clipper: getClipper(),
           ),
-            Container(
-//            bottom:,
-              alignment: FractionalOffset.bottomRight,
-              padding: EdgeInsets.only(bottom: 20.0,right:20.0),
-            child: FloatingActionButton(
-                materialTapTargetSize:  MaterialTapTargetSize.shrinkWrap,
-//                onPressed: ()=>{Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ChangeUserProfile()));},
-                child: Icon(Icons.edit,color: Colors.white,),
-            ),
-          ),
+
           Positioned(
             width: 350.0,
             top: MediaQuery.of(context).size.height / 8,
@@ -103,7 +97,7 @@ class _UserProfileState extends State<UserProfile> {
                                 ),
                                 child:Row(
                                     children: <Widget>[
-                                        Icon(Icons.verified_user),
+                                          Icon(Icons.verified_user),
                                         Container(
                                           width: 100.0,
                                           height: 20.0,
@@ -140,6 +134,7 @@ class _UserProfileState extends State<UserProfile> {
                             ),
                             SizedBox(height: 20.0,),
                             Container(
+
                               decoration: BoxDecoration(
                                   border: Border(bottom: BorderSide(color: Colors.blue))
                               ),
@@ -154,6 +149,15 @@ class _UserProfileState extends State<UserProfile> {
                                   SizedBox(width: 2.0,),
                                   SizedBox(width: 2.0),
                                   Text('Nodejs,php,mysql,java'),
+                                  SizedBox(width: 16.0),
+                                  Container(
+                                      child:GestureDetector(
+                                        child: Icon(Icons.edit),
+                                        onTap: ()=>{
+                                        showAlertDialog(context),
+                                        },
+                                      )
+                                  ),
                                 ],
                               ),
                             ),
@@ -205,6 +209,15 @@ class _UserProfileState extends State<UserProfile> {
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(46.0)),
                                       ),
                                   ),
+                                  SizedBox(width: 59.0),
+                                  Container(
+                                      child:GestureDetector(
+                                        child: Icon(Icons.edit),
+                                        onTap: ()=>{
+                                        showAlertDialog1(context),
+                                        },
+                                      )
+                                  ),
 
                                 ],
                               ),
@@ -218,6 +231,160 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ],
       ),
+    );
+  }
+  //Checkbox variable Declartion
+  bool val1=false;
+  bool val2=false;
+  bool val3= false;
+  bool val4=false;
+  bool val5= false;
+  Widget checkbox(String title, bool boolValue) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(title),
+        Checkbox(
+          value: boolValue,
+          onChanged: (bool value) {
+            /// manage the state of each value
+            setState(() {
+              switch (title) {
+                case "Mon":
+//                  bool temp1=true;
+                  val1 = value;
+                  break;
+                case "Tue":
+                  val2 = value;
+                  break;
+                case "Wed":
+                  val3 = value;
+                  break;
+                case "Thu":
+                  val4 = value;
+                  break;
+                case "Fri":
+                  val5 = value;
+                  break;
+
+              }
+            });
+          },
+        )
+      ],
+    );
+  }
+
+
+
+
+
+  void showAlertDialog(BuildContext context){
+      showDialog(
+          context: context,
+          builder: (BuildContext context)=>MySelection(),
+      );
+  }
+
+  void showAlertDialog1(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (BuildContext context)=>UpdateResume(),
+    );
+  }
+}
+
+
+
+
+//This refers to the Intrest Field Dialog
+class MySelection extends StatefulWidget {
+  @override
+  _MySelectionState createState() => _MySelectionState();
+}
+
+
+
+
+
+class _MySelectionState extends State<MySelection> {
+
+
+  bool monVal = false;
+  bool tuVal = false;
+  bool wedVal = false;
+  bool thurVal = false;
+  bool friVal = false;
+  bool satVal = false;
+  bool sunVal = false;
+
+  Widget checkbox(String title, bool boolValue) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(title),
+        Checkbox(
+          value: boolValue,
+          onChanged: (bool value) {
+            /// manage the state of each value
+            setState(() {
+              switch (title) {
+                case "NodeJs":
+                  monVal = value;
+//                  print(monVal);
+                  break;
+                case "PHP":
+                  tuVal = value;
+//                  print(tuVal);
+                  break;
+                case "Mysql":
+                  wedVal = value;
+//                  print(wedVal);
+                  break;
+                case "Java":
+                  thurVal = value;
+                  print(thurVal);
+                  break;
+                case "Nosql":
+                  friVal = value;
+//                  print(friVal);
+                  break;
+                case "Java":
+                  satVal = value;
+                  break;
+                case "Sun":
+                  sunVal = value;
+                  break;
+              }
+            });
+          },
+        )
+      ],
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+          title: Text('Update Your choise'),
+          children: <Widget>[
+            checkbox("NodeJs", monVal),
+            checkbox("PHP", tuVal),
+            checkbox("Mysql", wedVal),
+            checkbox("Java", thurVal),
+            checkbox("Nosql", friVal),
+            Container(
+              margin: EdgeInsets.all(35.0),
+              height: 35.0,
+              width: 35.0,
+              child: FlatButton(
+                textColor: Colors.white,
+                color: Colors.blue,
+                  onPressed: ()=>{},
+                  child: Text('Update')),
+            )
+          ],
     );
   }
 }
