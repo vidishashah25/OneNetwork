@@ -1,59 +1,44 @@
-class Intrests{
-  int id;
-  String name;
-  IntrestsArray intrestsArray;
-  List<IntrestsArray> intrests1;
-  List<IntrestsArray2> intrests2;
-  Intrests({
-      this.id,
-      this.name,
-    this.intrests1,
-    this.intrests2,
-    this.intrestsArray,
-      });
-  factory Intrests.fromJson(Map<String, dynamic> _map){
-    return Intrests(
-        id: _map['category_id'],
-        name:_map['category_name'],
-        intrestsArray: IntrestsArray.fromJson(_map['interests_array']),
-    );
-  }
+class Look{
+    String error;
+    String msg;
+    Intrests intrests;
+    Look({this.error,this.msg,this.intrests});
+
+    factory Look.fromJson(Map<String,dynamic> json){
+        return Look(
+            error: json['error'],
+            msg: json['message'],
+          intrests: Intrests.fromJson(json['interests']),
+        );
+    }
 }
 
-class IntrestsArray {
-  int id;
-  String name;
-  String category;
-  IntrestsArray({
-    this.id,
-    this.name,
-    this.category,
-    });
-
-  factory IntrestsArray.fromJson(Map<String , dynamic> json){
-      return new IntrestsArray(
-        id: json['id'],
-        name: json['name'].toString(),
-        category: json['category'].toString(),
+class Intrests {
+  String category_id;
+  String categoryname;
+  int count;
+  IntrestsArray intrestsArray;
+  Intrests({this.category_id,this.categoryname,this.count,this.intrestsArray});
+  factory Intrests.fromJson(Map<String, dynamic> json){
+      return Intrests(
+          category_id:json['category_id'],
+          categoryname:json['category_name'],
+          count:json['count'],
+          intrestsArray:IntrestsArray.fromJson(json['interests_array']),
       );
   }
 }
 
-class IntrestsArray2 {
-  int id;
-  String name;
-  String category;
-  IntrestsArray2({
-    this.id,
-    this.name,
-    this.category,
-  });
+class IntrestsArray{
+      int id;
+      String name;
+      IntrestsArray({this.id,this.name});
 
-  factory IntrestsArray2.fromJson(Map<String , dynamic> json){
-    return new IntrestsArray2(
-      id: json['id'],
-      name: json['name'].toString(),
-      category: json['category'].toString(),
-    );
+  factory IntrestsArray.fromJson(Map<String,dynamic> json){
+      return IntrestsArray(
+          id:json['id'],
+          name:json['name'],
+      );
   }
+
 }

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:login_page/Models/intrest.dart';
+
 import 'package:login_page/userprofile.dart';
-import 'package:http/http.dart' as http;
+  import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
@@ -32,29 +34,38 @@ class _LoginPageState extends State<LoginPage> {
     bool login=false;
     TextEditingController emailController = new TextEditingController();
     TextEditingController passwordController = new TextEditingController();
-    Future<String> _getSignin(String text, String text2) async {
-//            Dio dio= new Dio();
-//      FormData formData =new FormData.from(
-//          {
-//            "userid" : text,
-//            "password" : text2,
-//          }
-//      );
-//       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
-//       String ans = response.toString();
-//       print(ans);
-//       var responseJson = jsonDecode(ans);
-//       var result= responseJson["error"];
-//       print(result);
-       var result="false";
-      login=true;
-        if(result=="false"){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-        }
-      return result;
+//    Future<String> _getSignin(String text, String text2) async {
+////            Dio dio= new Dio();
+////      FormData formData =new FormData.from(
+////          {
+////            "userid" : text,
+////            "password" : text2,
+////          }
+////      );
+////       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+////       String ans = response.toString();
+////       print(ans);
+////       var responseJson = jsonDecode(ans);
+////       var result= responseJson["error"];
+////       print(result);
+//       var result="false";
+//      login=true;
+//        if(result=="false"){
+//          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+//        }
+//      return result;
+//    }
+    Intrests i;
+    Future<String> getHttp() async {
+      Dio dio= new Dio();
+      Response response = await dio.get("http://onenetwork.ddns.net/api/interests.php");
+      String ans = response.toString();
+      print(ans);
+      var responseJson = jsonDecode(ans);
+      print(Look.fromJson(responseJson));
+
+      return i.toString();
     }
-
-
 
     TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
 
@@ -102,8 +113,8 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-
-          _getSignin(emailController.text,passwordController.text);
+          getHttp();
+//          _getSignin(emailController.text,passwordController.text);
 //          if(login){
 //            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
 //          }
