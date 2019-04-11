@@ -7,7 +7,31 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 
+int _selected = 0;
 
+onChanged(int value){
+setState(() {
+ _selected = value; 
+});
+
+print('value = $value');
+}
+
+
+List<Widget> makeRadio(){
+  List<Widget> list = new List<Widget>();
+
+  for(int i=0; i<3; i++){
+    list.add(new Row(
+    children: <Widget>[
+      new Text('radio $i'),
+      new Radio(value: i, groupValue: _selected, onChanged: (int value){onChanged(value);},)
+    ],
+  ));
+  
+  }
+  return list;
+}
 
 final _formKey = GlobalKey<FormState>();
 final _pd = ProjectData();
@@ -17,6 +41,12 @@ final _pd = ProjectData();
     return Scaffold(
       appBar: AppBar(
         title: Text("New Post"),
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.all(15.0),
+            child: Icon(Icons.done)
+          ),
+        ],
       ),
       body: SingleChildScrollView(
             child: Container(
@@ -31,8 +61,9 @@ final _pd = ProjectData();
 //Project Title
                     TextFormField(
                       decoration: 
-                      InputDecoration(
-                        labelText: 'Project Title'),
+                      InputDecoration(labelText: 'Project Title'),
+                        autocorrect: true,
+                        autofocus: true,
                         validator: (value){
                           if(value.isEmpty){
                             return 'Please enter your Project Title';
@@ -44,6 +75,8 @@ final _pd = ProjectData();
                     TextFormField(
                       decoration: 
                       InputDecoration(labelText: 'Project Description',),
+                        autocorrect: true,
+                        autofocus: true,
                         maxLines: 3,
                         validator: (value){
                           if(value.isEmpty){
@@ -90,6 +123,27 @@ final _pd = ProjectData();
                         });
                       },
                     ),
+//radio button  
+                    Container(
+                      padding: new EdgeInsets.fromLTRB(3, 20, 20, 20),
+                      child: Text('Project Type',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Times New Roman',
+                        color: Colors.blue,
+
+                      ),
+                      ),
+                    ),
+                    Container(
+                      padding: new EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      child: Center(
+                        child: Column(
+                          children: makeRadio(),
+                        ),
+                      ),
+                  ),
+//Submit button                    
                     Container(
                      padding: const EdgeInsets.symmetric(
                        vertical: 16.0, horizontal: 16.0
@@ -113,6 +167,8 @@ final _pd = ProjectData();
                        color:Colors.blue,
                      )
                     ),
+
+                  
                   ],
                 ),
               ),
