@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 class Post extends StatefulWidget {
   @override
@@ -7,16 +9,44 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 
+
+    Future<String> _getsignup(String tx1,String tx2,String tx3,String tx4) async
+    {
+      Dio dio = new Dio();
+      FormData formdata = new FormData.from({
+        
+        "title":tx1,
+        "description":tx2,
+
+       
+      });
+
+      final response = await dio
+          .post("https://onenetwork.ddns.net/api/intersts.php", data: formdata);
+
+      String ans = response.toString();
+      print(ans);
+
+      var responseJson = jsonDecode(ans);
+
+      var result = responseJson["error"];
+
+      if (result == "false") {
+        print(result);
+        
+      }
+      return result.toString();
+    }
+
+
 int _selected = 0;
+  onChanged(int value){
+      setState(() {
+      _selected = value; 
+      });
 
-onChanged(int value){
-setState(() {
- _selected = value; 
-});
-
-print('value = $value');
-}
-
+      print('value = $value');
+  }
 
 List<Widget> makeRadio(){
   List<Widget> list = new List<Widget>();
@@ -168,7 +198,6 @@ final _pd = ProjectData();
                      )
                     ),
 
-                  
                   ],
                 ),
               ),
@@ -199,72 +228,6 @@ class ProjectData {
   };
 
   save(){
-    print('Project Details Added');
+    print('Project Details Created');
   }
-
 }
-
-
-
-// {
-//     "error": "false",
-//     "message": "success",
-//     "interests": [
-//         {
-//             "category_id": "1",
-//             "category_name": "languages",
-//             "error": "false",
-//             "message": "success",
-//             "interests_array": [
-//                 {
-//                     "id": "6",
-//                     "name": "java",
-//                     "category": "1"
-//                 },
-//                 {
-//                     "id": "7",
-//                     "name": "php",
-//                     "category": "1"
-//                 },
-//                 {
-//                     "id": "8",
-//                     "name": "mysql",
-//                     "category": "1"
-//                 }
-//             ]
-//         },
-//         {
-//             "category_id": "2",
-//             "category_name": "technologies",
-//             "error": "false",
-//             "message": "success",
-//             "interests_array": [
-//                 {
-//                     "id": "6",
-//                     "name": "java",
-//                     "category": "1"
-//                 },
-//                 {
-//                     "id": "7",
-//                     "name": "php",
-//                     "category": "1"
-//                 },
-//                 {
-//                     "id": "8",
-//                     "name": "mysql",
-//                     "category": "1"
-//                 },
-//                 {
-//                     "id": "9",
-//                     "name": "Artificial intelligence",
-//                     "category": "2"
-//                 },
-//                 {
-//                     "id": "10",
-//                     "name": "Image processing",
-//                     "category": "2"
-//                 }
-//             ]
-//         }
-//     ]
-// }
