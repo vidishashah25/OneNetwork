@@ -27,18 +27,23 @@ class HomePage extends StatelessWidget {
             new UserAccountsDrawerHeader(
               accountName: new Text('Taher M'),
               accountEmail: new Text('t@gmail.com'),
-              currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child: new Text('V'),),
+              currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child:
+              new Text('V'),),
               decoration: new BoxDecoration(color: Colors.blue[300]),
             ),
 
-            new ListTile(title: new Text('Page 1'),
-                trailing: new Icon(Icons.arrow_forward),
+            new ListTile(title: new Text('User Profile'),
+                leading: new Icon(Icons.account_circle),
+
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>UserProfile()))),
-            new ListTile(title: new Text('Page 2'),
-                trailing: new Icon(Icons.arrow_forward),
+            new ListTile(title: new Text('Post Project'),
+                leading: new Icon(Icons.edit),
+
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>new op('Page 2')))
             ),
-            new ListTile(title: new Text('close'),trailing: new Icon(Icons.arrow_forward),onTap: (){Navigator.pop(context);}),
+            new ListTile(title: new Text('Log Out'),
+                leading: new Icon(Icons.power_settings_new),
+                onTap: (){Navigator.pop(context);}),
           ],
         ),
       ),

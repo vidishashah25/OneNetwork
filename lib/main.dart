@@ -66,8 +66,13 @@ class _LoginPageState extends State<LoginPage> {
         width:  MediaQuery.of(context).size.width/2,
     );
 
-    final emailField = TextField(
+    final emailField = TextFormField(
       controller: emailController,
+      validator: (String arg){
+        if(arg.length<10){
+              return 'Please Insert Valid Student id';
+          }
+      },
       obscureText: false,
       style: style,
       decoration: InputDecoration(
@@ -97,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
+
           _getSignin(emailController.text,passwordController.text);
 //          if(login){
 //            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
@@ -146,7 +152,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-
             ),
 
           ),

@@ -331,15 +331,15 @@ class _MySelectionState extends State<MySelection> {
               switch (title) {
                 case "NodeJs":
                   monVal = value;
-//                  print(monVal);
+                  print(monVal);
                   break;
                 case "PHP":
                   tuVal = value;
-//                  print(tuVal);
+                  print(tuVal);
                   break;
                 case "Mysql":
                   wedVal = value;
-//                  print(wedVal);
+                  print(wedVal);
                   break;
                 case "Java":
                   thurVal = value;
@@ -347,7 +347,7 @@ class _MySelectionState extends State<MySelection> {
                   break;
                 case "Nosql":
                   friVal = value;
-//                  print(friVal);
+                  print(friVal);
                   break;
                 case "Java":
                   satVal = value;
