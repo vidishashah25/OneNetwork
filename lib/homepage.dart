@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
 import 'package:login_page/post.dart';
-import 'naviRoute.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:login_page/history_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -41,6 +40,10 @@ class HomePage extends StatelessWidget {
                 trailing: new Icon(Icons.arrow_forward),
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post()))
                 ),
+            new ListTile(title: new Text('History'),
+                trailing: new Icon(Icons.arrow_forward),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>HistoryPage()))
+                ),
             new ListTile(title: new Text('close'),trailing: new Icon(Icons.arrow_forward),onTap: (){Navigator.pop(context);}),
           ],
         ),
@@ -67,6 +70,7 @@ Future<List<Project>> _getFeeds() async{
       //Project temp = Project(u["id"], u["name"], u["username"], u["email"]);
       Project temp = Project(u["title"], u["body"]);
       up.add(temp);
+      print(temp.title);
     }
 
     print(up.length);

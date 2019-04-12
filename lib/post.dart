@@ -12,7 +12,7 @@ class _PostState extends State<Post> {
      _getdata();
     }
   List<String> l =new List(3);
-    List<String> lname =new List(3);
+  List<String> lname =new List(3);
     Map<int,String> mp = new Map<int,String>();
     void _getdata() async{
         Dio dio = new Dio();
@@ -144,7 +144,7 @@ final _pd = ProjectData();
 //Project Technology
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                      child: Text('Technology',
+                      child: Text('Language',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ final _pd = ProjectData();
                       ),
                     ),
                     CheckboxListTile(
-                      title: const Text('PHP'),
+                      title: Text(lname[1]),
                       value: _pd.technology[ProjectData.Php],
                       onChanged: (val){
                         setState(() {
@@ -162,7 +162,7 @@ final _pd = ProjectData();
                       },
                     ),
                     CheckboxListTile(
-                      title: const Text('Java'),
+                      title: Text(lname[0]),
                       value: _pd.technology[ProjectData.Java],
                       onChanged: (val){
                         setState(() {
@@ -171,7 +171,7 @@ final _pd = ProjectData();
                       },
                     ),
                     CheckboxListTile(
-                      title: const Text('AI'),
+                      title: Text(lname[2]),
                       value: _pd.technology[ProjectData.Ai],
                       onChanged: (val){
                         setState(() {
