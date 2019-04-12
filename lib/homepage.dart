@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
 import 'package:login_page/post.dart';
+import 'package:login_page/data.dart';
 import 'naviRoute.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -40,6 +41,10 @@ class HomePage extends StatelessWidget {
             new ListTile(title: new Text('New Post'),
                 trailing: new Icon(Icons.arrow_forward),
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post()))
+                ),
+            new ListTile(title: new Text('New Data'),
+                trailing: new Icon(Icons.arrow_forward),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>GetData()))
                 ),
             new ListTile(title: new Text('close'),trailing: new Icon(Icons.arrow_forward),onTap: (){Navigator.pop(context);}),
           ],
