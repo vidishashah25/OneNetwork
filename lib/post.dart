@@ -8,8 +8,34 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
+    void initState(){
+     _getdata();
+    }
+  List<String> l =new List(3);
+    List<String> lname =new List(3);
+    Map<int,String> mp = new Map<int,String>();
+    void _getdata() async{
+        Dio dio = new Dio();
+        final response=await dio.get("http://onenetwork.ddns.net/api/interests.php");
+        String ans = response.toString();
+        var data = jsonDecode(ans);
+        print(data["interests"][0]["interests_array"][0]["name"]);
+          l[0]=data["interests"][0]["interests_array"][0]["id"];
+          l[1]=data["interests"][0]["interests_array"][1]["id"];
+          l[2]=data["interests"][0]["interests_array"][2]["id"];
+          print(l);
 
-
+          lname[0]=data["interests"][0]["interests_array"][0]["name"];
+          lname[1]=data["interests"][0]["interests_array"][1]["name"];
+          lname[2]=data["interests"][0]["interests_array"][2]["name"];
+          print(lname);
+//     l.add(mp[data["interests"][0]["interests_array"][0]["id"]]=data["interests"][0]["interests_array"][0]["name"]);
+//     l.add(mp[data["interests"][0]["interests_array"][1]["id"]]=data["interests"][0]["interests_array"][1]["name"]);
+//      l.add(mp[data["interests"][0]["interests_array"][2]["id"]]=data["interests"][0]["interests_array"][2]["name"]);
+//      for(int i=0;i<l.length;i++){
+//          print(l[i]);
+//      }
+    }
     Future<String> _getsignup(String tx1,String tx2,String tx3,String tx4) async
     {
       Dio dio = new Dio();
