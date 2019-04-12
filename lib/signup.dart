@@ -32,7 +32,7 @@ class _signUpState extends State<signUp> {
       });
 
       final response = await dio
-          .post("https://one-network.000webhostapp.com/api/register.php", data: formdata);
+          .post("https://onenetwork.ddns.net/api/register.php", data: formdata);
 
       String ans = response.toString();
       print(ans);
@@ -161,5 +161,3 @@ class _signUpState extends State<signUp> {
     );
   }
 }
-
-
