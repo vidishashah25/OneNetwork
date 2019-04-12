@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
+import 'forgetPassword.dart';
+
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -35,20 +38,19 @@ class _LoginPageState extends State<LoginPage> {
 
 
     Future<String> _getSignin(String text, String text2) async {
-//            Dio dio= new Dio();
-//      FormData formData =new FormData.from(
-//          {
-//            "userid" : text,
-//            "password" : text2,
-//          }
-//      );
-//       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
-//       String ans = response.toString();
-//       print(ans);
-//       var responseJson = jsonDecode(ans);
-//       var result= responseJson["error"];
-//       print(result);
-       var result="false";
+      Dio dio= new Dio();
+      FormData formData =new FormData.from(
+          {
+            "userid" : text,
+            "password" : text2,
+          }
+      );
+       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+       String ans = response.toString();
+       print(ans);
+       var responseJson = jsonDecode(ans);
+       var result= responseJson["error"];
+       print(result);
 
       login=true;
         if(result=="false"){
@@ -138,7 +140,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/50),
                   FlatButton(
-                    onPressed: ()=>{}, child: Text("Forgot Password ?"),
+                    onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder:(context)=>forgetPass()));
+                    },
+                    child: Text("Forgot Password ?"),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   FlatButton(

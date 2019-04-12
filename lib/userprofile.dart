@@ -153,10 +153,10 @@ class _UserProfileState extends State<UserProfile> {
                                   Container(
                                       child:GestureDetector(
                                         child: Icon(Icons.edit),
-                                        onTap: ()=>{
-                                        showAlertDialog(context),
-                                        },
-                                      )
+                                        onTap: () {
+                                          showAlertDialog(context);
+                                        }
+                                      ),
                                   ),
                                 ],
                               ),
@@ -213,9 +213,9 @@ class _UserProfileState extends State<UserProfile> {
                                   Container(
                                       child:GestureDetector(
                                         child: Icon(Icons.edit),
-                                        onTap: ()=>{
+                                        onTap: ()=>
                                         showAlertDialog1(context),
-                                        },
+
                                       )
                                   ),
 
