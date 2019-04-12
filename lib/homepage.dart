@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/userprofile.dart';
+import 'package:login_page/post.dart';
 import 'naviRoute.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -29,15 +30,17 @@ class HomePage extends StatelessWidget {
               accountEmail: new Text('t@gmail.com'),
               currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child: new Text('V'),),
               decoration: new BoxDecoration(color: Colors.blue[300]),
+              
             ),
 
             new ListTile(title: new Text('Page 1'),
                 trailing: new Icon(Icons.arrow_forward),
-                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>UserProfile()))),
-            new ListTile(title: new Text('Page 2'),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>UserProfile()))
+                ),
+            new ListTile(title: new Text('New Post'),
                 trailing: new Icon(Icons.arrow_forward),
-                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>new op('Page 2')))
-            ),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post()))
+                ),
             new ListTile(title: new Text('close'),trailing: new Icon(Icons.arrow_forward),onTap: (){Navigator.pop(context);}),
           ],
         ),
@@ -70,40 +73,48 @@ Future<List<Project>> _getFeeds() async{
     return up;
 }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: FutureBuilder(
-          future: _getFeeds(),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            if(snapshot.data == null){
-              return Container(
-                child: Center(
-                  child: Text("Loading..."),
-                ),
-              );
-            }
-            else{
-              return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index){
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage("url"),
-                  ),
-                  title: Text(snapshot.data[index].title),
-                  subtitle: Text(snapshot.data[index].body),
-                  
-                );
+    return FutureBuilder(
+              future: _getFeeds(),
+              builder: (BuildContext context, AsyncSnapshot snapshot){
+                if(snapshot.data == null){
+                  return Container(
+                    child: Center(
+                      child: Text("Loading..."),
+                    ),
+                  );
+                }
+                else{
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage("url"),
+                        radius: 25.0,
+                      ),
+                      title: Text(
+                        snapshot.data[index].title,
+                        style: TextStyle(color: Colors.blue,
+                        fontFamily: 'Times New Roman',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        ),
+                      ),
+                      subtitle: Text(
+                        snapshot.data[index].body,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                        ),                        
+                      ), 
+                    );
+                          
+                      },
+                  );
+                }
               },
             );
-            }
-          },
-        ),
-      ),
-    );
   }
 }
 
@@ -124,4 +135,3 @@ class Project{
 
   Project(this.title, this.body); 
 }
-
