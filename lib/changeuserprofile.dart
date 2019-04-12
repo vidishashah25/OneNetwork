@@ -1,6 +1,8 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'main.dart';
 import 'package:flutter/material.dart';
+
 class ChangeUserProfile extends StatefulWidget {
   @override
   _ChangeUserProfileState createState() => _ChangeUserProfileState();
@@ -13,7 +15,6 @@ class _ChangeUserProfileState extends State<ChangeUserProfile> {
     getusername();
   }
 
-
   Future<String> getusername() async {
     var url = await http.get("https://api.github.com/users/vishweshsoni");
     var responseJson = json.decode(url.body);
@@ -24,7 +25,7 @@ class _ChangeUserProfileState extends State<ChangeUserProfile> {
       userprofile = image;
     });
   }
-  Widget_getImage() {
+  Widget _getImage(){
     if (userprofile == null) {
       return Container(
         width: 150.0,
@@ -54,155 +55,104 @@ class _ChangeUserProfileState extends State<ChangeUserProfile> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-            children: <Widget>[
-              ClipPath(
-                child: Container(color: Colors.blue.withOpacity(0.8)),
-                clipper: getClipper(),
-              ),
-              Positioned(
-                width: 350.0,
-                top: MediaQuery.of(context).size.height / 8,
-                child: Column(
-                  children: <Widget>[
-                    Widget_getImage(),
-                    SizedBox(height: 5.0),
-                    Text(
-                      'vishwehsh',
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(height: 15.0),
-                    Container(
-                      margin: EdgeInsets.only(left: 20.0,right:20.0),
-                      alignment: FractionalOffset.center,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.blue))
-                            ),
-                            child:Row(
-                              children: <Widget>[
-                                Icon(Icons.verified_user),
-                                Container(
-                                  width: 100.0,
-                                  height: 20.0,
-                                  child: Text('Student Id',textAlign: TextAlign.center,),
-                                ),
-                                SizedBox(width: 2.0),
-                                Text('201812101'),
+      appBar: AppBar(backgroundColor:Colors.blue,title:Text('User Profile'),actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.power_settings_new),
+            ),
+        ],
+      ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              color:Colors.white,
+              child: Padding(
+                  padding: EdgeInsets.only(top: 15.0,bottom: 7.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                          children:<Widget>[
 
-
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(left: 8.0,right: 5.0,bottom: 8.0),
+                              width: 120.0,
+                              height:120.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+//                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: _getImage(),
                             ),
-                          ),
-                          SizedBox(height: 20.0,),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.blue))
-                            ),
-                            child:Row(
-                              children: <Widget>[
-
-                                Icon(Icons.email),
-                                Container(
-                                  width: 100.0,
-                                  height: 20.0,
-
-                                  child: Text('Email',textAlign: TextAlign.center,),
-                                ),
-                                SizedBox(width: 2.0,),
-                                SizedBox(width: 2.0),
-                                Text('201812101@daiict.ac.in'),
-
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.0,),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.blue))
-                            ),
-                            child:Row(
-                              children: <Widget>[
-                                Icon(Icons.favorite),
-                                Container(
-                                  width: 100.0,
-                                  height: 20.0,
-                                  child: Text('Intrests',textAlign: TextAlign.center,),
-                                ),
-                                SizedBox(width: 2.0,),
-                                SizedBox(width: 2.0),
-                                Text('Nodejs,php,mysql,java'),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.0,),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.blue))
-                            ),
-                            child:Row(
-                              children: <Widget>[
-                                Icon(Icons.assessment),
-                                Container(
-                                  width: 100.0,
-                                  height: 20.0,
-                                  child: Text('No of project',textAlign: TextAlign.center,),
-                                ),
-                                SizedBox(width: 2.0,),
-                                SizedBox(width: 2.0),
-                                Text('20'),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.0,),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.blue))
-                            ),
-                            child:Row(
-                              children: <Widget>[
-                                Icon(Icons.local_activity),
-                                Container(
-                                  width: 100.0,
-                                  height: 20.0,
-                                  child: Text('Resume',textAlign: TextAlign.center,),
-                                ),
-                                SizedBox(width: 2.0,),
-                                SizedBox(width: 2.0),
-                                Material(
-                                  color: Colors.white70,
-                                  child: MaterialButton(
-                                    onPressed: null,
-                                    minWidth: 25.0,
-                                    color: Colors.grey,
-                                    child: Text('Download',style: TextStyle(
-                                      color: Colors.black,
-
-                                    ),
-                                    ),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(46.0)),
+                            SizedBox(width: 15.0,),
+                            Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Text('Name :',style: TextStyle(
+                                          color: Colors.black,
+                                        fontSize: 18.0,
+                                      ),),
+                                      SizedBox(width: 5.0,),
+                                      Text('$name',style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18.0,
+                                      ),),
+                                    ],
                                   ),
-                                ),
+                                  SizedBox(height: 20.0,),
+                                  Row(
+                                      children: <Widget>[
+                                          Text('Student Id :',style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                          ),
+                                    ),
+                                          SizedBox(width: 5.0,),
+                                          Text('201812101',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0,
+                                          ),),
+                                      ],
+                                  ),
 
-                              ],
+
+                                ],
                             ),
-                          )
-                        ],
+                          ],
                       ),
-                    ),
-//
-                  ],
-                ),
+                      SizedBox(height: 5.0,),
+                      Container(
+                        margin: EdgeInsets.only(left: 0.0,right: 0.0),
+                        height: 1.1,width: double.infinity,color: Colors.black,),
+                      SizedBox(height: 5.0,),
+                      Container(
+                        margin: EdgeInsets.only(left: 30.0,top: 10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.favorite),
+                            Text('Intrests'),
+                            TextField(
+
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+
+                  ),
+
               ),
-            ],
+
+            ),
+
+          ),
         ),
     );
   }

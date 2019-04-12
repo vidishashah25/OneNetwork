@@ -32,21 +32,24 @@ class _LoginPageState extends State<LoginPage> {
     bool login=false;
     TextEditingController emailController = new TextEditingController();
     TextEditingController passwordController = new TextEditingController();
-    Future<bool> _getSignin(String text, String text2) async {
-      //       Dio dio= new Dio();
-      // FormData formData =new FormData.from(
-      //     {
-      //       "userid" : text,
-      //       "password" : text2,
-      //     }
-      // );
-      //  final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
-      //  String ans = response.toString();
-      //  print(ans);
-      //  var responseJson = jsonDecode(ans);
-      //  var result= responseJson["error"];
-      //  print(result);
-     var result = true;
+
+
+    Future<String> _getSignin(String text, String text2) async {
+//            Dio dio= new Dio();
+//      FormData formData =new FormData.from(
+//          {
+//            "userid" : text,
+//            "password" : text2,
+//          }
+//      );
+//       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+//       String ans = response.toString();
+//       print(ans);
+//       var responseJson = jsonDecode(ans);
+//       var result= responseJson["error"];
+//       print(result);
+       var result="false";
+
       login=true;
         if(result=="false"){
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
@@ -57,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
     TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
+
 
     final imageField= Image(
         image: AssetImage("images/logo.jpeg"),
@@ -105,7 +109,6 @@ class _LoginPageState extends State<LoginPage> {
             textAlign: TextAlign.center,
             style: style.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
-
       ),
     );
 
