@@ -6,7 +6,7 @@ import 'naviRoute.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,11 +16,29 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
+  SharedPreferences prefs;
+  var userid;
+
+  getdata() async {
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+    //print(userid);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getdata();
+   // print(userid);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Home Page'),
+        title: new Text(userid),
         actions: <Widget>[
           new IconButton(icon: new Icon(Icons.search), onPressed: null),
           new IconButton(icon: new Icon(Icons.notifications), onPressed: (){
@@ -40,15 +58,24 @@ class HomePageState extends State<HomePage> {
 
             ),
 
-            new ListTile(title: new Text('Page 1'),
-                trailing: new Icon(Icons.arrow_forward),
+            new ListTile(title: new Text('Profile'),
+                leading: Icon(Icons.account_circle),
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>UserProfile()))
                 ),
-            new ListTile(title: new Text('New Post'),
-                trailing: new Icon(Icons.arrow_forward),
+            new ListTile(title: new Text('Add Post'),
+                leading: new Icon(Icons.edit),
                 onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post()))
                 ),
-            new ListTile(title: new Text('close'),trailing: new Icon(Icons.arrow_forward),onTap: (){Navigator.pop(context);}),
+            new ListTile(title: Text('Posted Projects'),
+              leading: new Icon(Icons.description),
+            ),
+            new ListTile(title: Text('Applied Projects'),
+              leading: new Icon(Icons.exit_to_app),
+            ),
+            new ListTile(title: new Text('Log Out'),
+                leading: new Icon(Icons.power_settings_new),
+                onTap: (){Navigator.pop(context);}),
+
           ],
         ),
       ),

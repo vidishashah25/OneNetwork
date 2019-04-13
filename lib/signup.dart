@@ -31,8 +31,7 @@ class _signUpState extends State<signUp> {
         "password":tx4
       });
 
-      final response = await dio
-          .post("https://onenetwork.ddns.net/api/register.php", data: formdata);
+      final response = await dio.post("http://onenetwork.ddns.net/api/register.php", data: formdata);
 
       String ans = response.toString();
       print(ans);
@@ -43,7 +42,16 @@ class _signUpState extends State<signUp> {
 
       if (result == "false") {
         print(result);
-        Navigator.pushReplacement(
+        Fluttertoast.showToast(
+            msg: "Registered",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black87,
+            fontSize: 16.0
+        );
+        Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));
       }
 
@@ -110,15 +118,10 @@ class _signUpState extends State<signUp> {
             .width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          Fluttertoast.showToast(
-              msg: "Registered",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.grey,
-              textColor: Colors.black87,
-              fontSize: 16.0
-          );
+            print(firstnameControl.text);
+            print(lastnameControl.text);
+            print(useridControl.text);
+            print(passwordControl.text);
           _getsignup(firstnameControl.text, lastnameControl.text, useridControl.text,
               passwordControl.text);
         },
