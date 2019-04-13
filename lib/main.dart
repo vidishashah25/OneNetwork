@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'forgetPassword.dart';
 
 
@@ -29,6 +30,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
 
@@ -45,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
             "password" : text2,
           }
       );
-       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
+       final response = await dio.post("http://onenetwork.ddns.net/api/login/login.php", data: formData);
        String ans = response.toString();
        print(ans);
        var responseJson = jsonDecode(ans);
@@ -54,6 +57,10 @@ class _LoginPageState extends State<LoginPage> {
 
       login=true;
         if(result=="false"){
+          prefs = await SharedPreferences.getInstance();
+          //print(emailController.text);
+          prefs.setString("userid", emailController.text);
+          prefs.commit();
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         }
       return result;
@@ -102,9 +109,9 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-        // _getSignin(emailController.text,passwordController.text);
+         _getSignin(emailController.text,passwordController.text);
         // if(login){
-           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+          // Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         // }
         },
         child: Text("Login",
