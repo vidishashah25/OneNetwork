@@ -61,14 +61,13 @@ class feed extends StatefulWidget {
 
 
 class _feedState extends State<feed> {
-Future<List<Project>> _getFeeds() async{
-    List<Project> up = [];
-    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
+Future<List<Projects>> _getFeeds() async{
+    List<Projects> up = [];
+    var data = await http.get('http://onenetwork.ddns.net/api/display_projects.php');
     var jsonData = json.decode(data.body);
 
     for(var u in jsonData){
-      //Project temp = Project(u["id"], u["name"], u["username"], u["email"]);
-      Project temp = Project(u["title"], u["body"]);
+      Projects temp = Projects(u["projects"]["id"], u["projects"]["title"], u["projects"]["description"], u["projects"]["mentor"], u["projects"]["projectType"], u["projects"]["creator"], u["projects"]["time"], u["projects"]["status"]);
       up.add(temp);
       print(temp.title);
     }
@@ -107,7 +106,7 @@ Future<List<Project>> _getFeeds() async{
                         ),
                       ),
                       subtitle: Text(
-                        snapshot.data[index].body,
+                        snapshot.data[index].description,
                         style: TextStyle(
                           fontSize: 15.0,
                         ),                        
@@ -133,9 +132,22 @@ class Updates{
   Updates(this.id, this.name, this.username, this.email);
 }
 
-class Project{
-  final String title;
-  final String body;
+class Projects{
 
-  Project(this.title, this.body); 
+  final String id;
+  final String title;
+  final String description;
+  final String mentor;
+  final String projectType;
+  final String creator;
+  final String time;
+  final String status;
+
+  Projects(this.id, this.title, this.description, this.mentor,this.projectType,this.creator,this.time,this.status);
+}
+
+class Tempo{
+  final  String title;
+  final String description;
+  Tempo(this.title,this.description);
 }

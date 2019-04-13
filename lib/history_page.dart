@@ -9,27 +9,22 @@ class HistoryPage extends StatefulWidget {
 }
 
 class HistoryPageState extends State<HistoryPage> {
-
-  //=> create Data;
-
-  List<HistoryModel> histories = [
-    HistoryModel("1","taher","how are you", "P_name"),
-    HistoryModel("2","Vishwesh","how are you", "P_name"),
-  ];
+  //=> fetch Data;
 
   Future<List<HistoryModel>> _getData() async {
     List<HistoryModel> histories = [];
-    // var temp = await http.get('onenetwork.ddns.net/api/view_project_details.php');
-    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
-    var jsonData = json.decode(data.body);
     
+    var data = await http.get('https://jsonplaceholder.typicode.com/users');
+    var jsonData = json.decode(data.body);
+
     for(var u in jsonData){
-      HistoryModel temp = HistoryModel(u["userId"], u["id"], u["title"], u["body"]);
+      HistoryModel temp = HistoryModel(u["id"], u["name"], u["username"], u["email"],u["address"]["street"]);
       histories.add(temp);
-      print(temp);
+      print(temp.street);
+      print(u["address"]["street"]);
     }
 
-    print("tot. data: $histories.length");
+    print(histories.length);
     return histories;
   }
 
@@ -45,14 +40,14 @@ class HistoryPageState extends State<HistoryPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Padding(
-            //   padding:
-            //       const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
-            //   child: Text(
-            //     'Project Title',
-            //     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
-            //   ),
-            // ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
+              child: Text(
+                'Project Title',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
@@ -94,22 +89,15 @@ class HistoryPageState extends State<HistoryPage> {
                 }
                 else{
                   return ListView.builder(
-                    itemCount: histories.length,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index){
-                      return _historyWidget(histories[index]);
+                      return _historyWidget(snapshot.data[index]);
                     },
                   );
                 }
                 },
               ),
-              
-//old code
-              // child: ListView.builder(
-              //     itemCount: histories.length,
-              //     itemBuilder: (BuildContext context, int index) {
-              //       return _historyWidget(histories[index]);
-              //     }),
-//old code
             ),
           ],
         ),
@@ -142,11 +130,11 @@ class HistoryPageState extends State<HistoryPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        history.title.toString(),
+                        history.username,
                         style: TextStyle(fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                       ),
-                      Text(history.body)
+                      Text(history.street)
                     ],
                   ),
                 ),
@@ -156,50 +144,31 @@ class HistoryPageState extends State<HistoryPage> {
         ),
       ),
     );
+  
   }
 }
 
 class HistoryModel {
-  // final String historyAssetPath;
-  // final String historyType;
-  // final String receiverName;
-  // final double amount;
-  // final String date;
-  // final String cardLogoPath;
-
-  // HistoryModel(this.historyAssetPath, this.historyType, this.receiverName,
-      // this.amount, this.date, this.cardLogoPath);
   
-  // final int id;
-  // final String name;
-  // final String msg;
-  // final String p_name;
-  
-  // HistoryModel(this.id, this.name, this.msg, this.p_name);
+  final int id;
+  final String name;
+  final String username;
+  final String email;
+  final String street;
+  // final Address address;
 
-  final String userid;
-  final String id;
-  final String title;
-  final String body;
-
-  HistoryModel(this.userid, this.id, this.title, this.body);
+ HistoryModel(this.id, this.name, this.username, this.email,this.street);
 }
 
-// List<HistoryModel> histories = [
-//     HistoryModel('images/ico_send_money.png', 'Paid to', 'Salina', 999.0,
-//         '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_pay_elect.png', 'Electricity\nbill paid',
-//         'Fantasy lights', 830.0, '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_pay_phone.png', 'Mobile\nrecharged',
-//         'Fantasy mobile', 830.0, '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_receive_money.png', 'Received from', 'Salina',
-//         30.0, '08 May 2018', 'images/ico_logo_blue.png'),
-//     HistoryModel('images/ico_send_money.png', 'Paid to', 'Salina', 999.0,
-//         '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_pay_elect.png', 'Electricity\nbill paid',
-//         'Fantasy lights', 830.0, '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_pay_phone.png', 'Mobile\nrecharged',
-//         'Fantasy mobile', 830.0, '08 May 2018', 'images/ico_logo_red.png'),
-//     HistoryModel('images/ico_receive_money.png', 'Received from', 'Salina',
-//         30.0, '08 May 2018', 'images/ico_logo_blue.png'),
-//   ];
+// class Project_details {
+  
+  
+//   final String title;
+//   final String description;
+//   final String mentor;
+//   final String creator;
+//   final String creatorname;
+//   final String applied_user;
+
+//  Project_details(this.title, this.description, this.mentor, this.creator, this.creatorname, this.applied_user);
+// }
