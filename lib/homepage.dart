@@ -8,7 +8,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  HomePageState createState() {
+    return new HomePageState();
+  }
+}
+
+class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -30,7 +37,7 @@ class HomePage extends StatelessWidget {
               accountEmail: new Text('t@gmail.com'),
               currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child: new Text('V'),),
               decoration: new BoxDecoration(color: Colors.blue[300]),
-              
+
             ),
 
             new ListTile(title: new Text('Page 1'),
