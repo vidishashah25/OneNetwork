@@ -6,6 +6,10 @@ import 'package:http/http.dart' as http;
 import 'homepage.dart';
 import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'forgetPassword.dart';
+
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -26,6 +30,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
 
@@ -35,23 +41,26 @@ class _LoginPageState extends State<LoginPage> {
 
 
     Future<String> _getSignin(String text, String text2) async {
-//            Dio dio= new Dio();
-//      FormData formData =new FormData.from(
-//          {
-//            "userid" : text,
-//            "password" : text2,
-//          }
-//      );
-//       final response = await dio.post("https://one-network.000webhostapp.com/api/login/login.php", data: formData);
-//       String ans = response.toString();
-//       print(ans);
-//       var responseJson = jsonDecode(ans);
-//       var result= responseJson["error"];
-//       print(result);
-       var result="false";
+      Dio dio= new Dio();
+      FormData formData =new FormData.from(
+          {
+            "userid" : text,
+            "password" : text2,
+          }
+      );
+       final response = await dio.post("http://onenetwork.ddns.net/api/login/login.php", data: formData);
+       String ans = response.toString();
+       print(ans);
+       var responseJson = jsonDecode(ans);
+       var result= responseJson["error"];
+       print(result);
 
       login=true;
         if(result=="false"){
+          prefs = await SharedPreferences.getInstance();
+          //print(emailController.text);
+          prefs.setString("userid", emailController.text);
+          prefs.commit();
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         }
       return result;
@@ -100,10 +109,11 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-        // _getSignin(emailController.text,passwordController.text);
-        // if(login){
-           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-        // }
+         Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+        _getSignin(emailController.text,passwordController.text);
+        if(login){
+         Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+        }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -111,9 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
-
-
-  
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -138,7 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/50),
                   FlatButton(
-                    onPressed: ()=>{}, child: Text("Forgot Password ?"),
+                    onPressed: (){
+                  //  Navigator.push(context, MaterialPageRoute(builder:(context)=>forgetPass()));
+                    },
+                    child: Text("Forgot Password ?"),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   FlatButton(
@@ -149,9 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-
             ),
-
           ),
         ),
       ),
