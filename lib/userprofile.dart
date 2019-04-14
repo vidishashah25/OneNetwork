@@ -53,6 +53,7 @@ class _UserProfileState extends State<UserProfile> {
   Future<String> getusername() async {
     var url = await http.get("https://api.github.com/users/vishweshsoni");
     var responseJson = json.decode(url.body);
+    // print(responseJson);
     var name1 = responseJson['login'];
     var image = responseJson['avatar_url'];
     setState(() {

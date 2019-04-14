@@ -1,6 +1,12 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'package:login_page/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
 
 class Post extends StatefulWidget {
   @override
@@ -8,9 +14,60 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
-    void initState(){
-     _getdata();
+SharedPreferences prefs;
+var userid = "201812074"; //comment this when login starts working for @taher
+
+
+@override
+void initState(){
+  //-> uncomment this when login starts working for @taher
+    //_getData1();
+    _getdata();
+
+    super.initState();
+}
+
+//-> uncomment this when login starts working for @taher
+  // void _getData1() async{
+  //   prefs = await SharedPreferences.getInstance();
+  //   userid = prefs.getString("userid");
+  // }
+
+Future<String> _postData(String name,String description) async {
+      Dio dio = new Dio();
+print(name);
+print(description);
+print(userid);
+      FormData formData = new FormData.from({
+        "title": name,
+        "description": description,
+        "userid": userid,
+        "project_type": 102
+      });
+      final response = await dio
+          .post("http://onenetwork.ddns.net/api/post_project.php", data: formData);
+      String ans = response.toString();
+      print(ans);
+      var responseJson = jsonDecode(ans);
+      var result = responseJson["error"];
+
+      if (result == "false") {
+        Fluttertoast.showToast(
+            msg: "Post has been added",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black87,
+            fontSize: 16.0);
+      }
+      return result;
     }
+
+    // void initState(){
+    //  _getdata();
+    // }
+
   List<String> l =new List(3);
     List<String> lname =new List(3);
     Map<int,String> mp = new Map<int,String>();
@@ -19,52 +76,16 @@ class _PostState extends State<Post> {
         final response=await dio.get("http://onenetwork.ddns.net/api/interests.php");
         String ans = response.toString();
         var data = jsonDecode(ans);
-        print(data["interests"][0]["interests_array"][0]["name"]);
-          l[0]=data["interests"][0]["interests_array"][0]["id"];
-          l[1]=data["interests"][0]["interests_array"][1]["id"];
-          l[2]=data["interests"][0]["interests_array"][2]["id"];
+        //print(data["interests"][0]["interests_array"][0]["name"]);
+        //instead of 3 put count, Don't worry pratik will send in api.
+        for(int i=0;i<3;i++){
+          l[i]=data["interests"][0]["interests_array"][i]["id"];
+          lname[i]=data["interests"][0]["interests_array"][i]["name"];
+        }
           print(l);
-
-          lname[0]=data["interests"][0]["interests_array"][0]["name"];
-          lname[1]=data["interests"][0]["interests_array"][1]["name"];
-          lname[2]=data["interests"][0]["interests_array"][2]["name"];
           print(lname);
-//     l.add(mp[data["interests"][0]["interests_array"][0]["id"]]=data["interests"][0]["interests_array"][0]["name"]);
-//     l.add(mp[data["interests"][0]["interests_array"][1]["id"]]=data["interests"][0]["interests_array"][1]["name"]);
-//      l.add(mp[data["interests"][0]["interests_array"][2]["id"]]=data["interests"][0]["interests_array"][2]["name"]);
-//      for(int i=0;i<l.length;i++){
-//          print(l[i]);
-//      }
     }
-    Future<String> _getsignup(String tx1,String tx2,String tx3,String tx4) async
-    {
-      Dio dio = new Dio();
-      FormData formdata = new FormData.from({
-        
-        "title":tx1,
-        "description":tx2,
-
-       
-      });
-
-      final response = await dio
-          .post("https://onenetwork.ddns.net/api/intersts.php", data: formdata);
-
-      String ans = response.toString();
-      print(ans);
-
-      var responseJson = jsonDecode(ans);
-
-      var result = responseJson["error"];
-
-      if (result == "false") {
-        print(result);
-        
-      }
-      return result.toString();
-    }
-
-
+    
 int _selected = 0;
   onChanged(int value){
       setState(() {
@@ -208,9 +229,8 @@ final _pd = ProjectData();
                        onPressed: (){
                          final form = _formKey.currentState;
                          if(form.validate()){
+                           _postData(_pd.name,_pd.description);
                            form.save();
-                           _pd.save();
-                           _showDialog(context);
                          } 
                        },
                        padding: const EdgeInsets.all(8.0),
@@ -233,9 +253,9 @@ final _pd = ProjectData();
       ),
     );
   }
-  _showDialog(BuildContext context){
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text('New Post Added')));
-  }
+  // _showDialog(BuildContext context){
+  //   Scaffold.of(context).showSnackBar(SnackBar(content: Text('New Post Added')));
+  // }
 }
 
 
@@ -253,7 +273,4 @@ class ProjectData {
     Ai : false,
   };
 
-  save(){
-    print('Project Details Created');
-  }
 }
