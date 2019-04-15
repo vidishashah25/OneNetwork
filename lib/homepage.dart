@@ -117,19 +117,17 @@ class _feedState extends State<feed> {
       i = jsonData["projects"].length;
       print(jsonData["projects"].length);
       for (int i = 0; i < jsonData["projects"].length; i++) {
-        print(jsonData["projects"][i]["id"]);
+        print(jsonData["projects"][i]["project"]["id"]);
         temp = new DataModel(
-            jsonData["projects"][i]["id"],
-            jsonData["projects"][i]["title"],
-            jsonData["projects"][i]["description"],
-            jsonData["projects"][i]["mentor"],
-            jsonData["projects"][i]["creator"]);
+            jsonData["projects"][i]["project"]["id"],
+            jsonData["projects"][i]["project"]["title"],
+            jsonData["projects"][i]["project"]["description"],
+            jsonData["projects"][i]["project"]["mentor"],
+            jsonData["projects"][i]["project"]["creator"]);
         print('reached');
         histories.add(temp);
         print(temp.id);
       }
-
-
     }
     return histories;
   }
