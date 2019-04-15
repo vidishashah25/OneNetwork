@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'postedProjects.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -75,12 +76,10 @@ class HomePageState extends State<HomePage> {
                 onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                     builder: (BuildContext) => HistoryPage()))),
             new ListTile(
-              title: Text('Posted Projects'),
+              title: Text('Your Projects'),
               leading: new Icon(Icons.description),
-            ),
-            new ListTile(
-              title: Text('Applied Projects'),
-              leading: new Icon(Icons.exit_to_app),
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext) => FetchPost()))
             ),
             new ListTile(
                 title: Text('Log Out'),
@@ -176,14 +175,6 @@ class _feedState extends State<feed> {
   }
 }
 
-class Updates {
-  final int id;
-  final String name;
-  final String username;
-  final String email;
-
-  Updates(this.id, this.name, this.username, this.email);
-}
 
 class DataModel {
   final String id;
