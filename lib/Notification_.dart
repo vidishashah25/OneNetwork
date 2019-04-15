@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:login_page/acknowlege.dart';
+import 'package:login_page/history_page.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,8 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Project{
   final String notification;
   final String id;
+  final int flag;
 
-  Project(this.notification, this.id); 
+  Project(this.notification, this.id, this.flag); 
 }
 // Notification-Class end....
 
@@ -37,6 +40,7 @@ class _NotifyState extends State<Notify> {
   void initState() {
     // TODO: implement initState
     getdata();
+    _getProjects();
     // print(userid);
     super.initState();
   }
@@ -45,15 +49,17 @@ class _NotifyState extends State<Notify> {
     String url ="http://onenetwork.ddns.net/api/view_notifications.php?userid="+userid;
     var data = await http.get(url);
     var JsonData = json.decode(data.body);
-    
-
     List<Project> projects = [];
-    for(var u in JsonData){
-      
-      Project project = Project(u["notification"],u["project_id"]);
-      projects.add(project);
-      // print(project.notification);
+    Project p;
+
+    for(int i=0; i<JsonData.length; i++){
+      p = new Project(
+        JsonData[i]["notification"],
+        JsonData[i]["project_id"],
+        JsonData[i]["flag_value"]);
+        projects.add(p);
     }
+    
 
     print(projects.length);
     return projects;
@@ -85,12 +91,12 @@ class _NotifyState extends State<Notify> {
                     backgroundImage: NetworkImage(""),
                   ),
                   title: Text(snapshot.data[index].notification),
-                  // subtitle: Text(snapshot.data[index].),
-                  // onTap: (){
-                  //   Navigator.push(context,
-                  //     new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
-                  //   );
-                  // },
+                  onTap: (){
+                    Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => Acknowledge(snapshot.data[index].id)));
+                  },
                 );
               },
             );
@@ -102,8 +108,7 @@ class _NotifyState extends State<Notify> {
   }
 }
 
-class User{
-  
+class User{  
   final int id;
   final String name;
   final String username;
@@ -111,188 +116,3 @@ class User{
 
   User(this.id, this.name, this.username, this.email);
 }
-
-// class DetailPage extends StatelessWidget {
-  
-//   final Project project;
-//   DetailPage(this.project);
-
-//   Future<List<User>> _getUserData() async {
-//     var data = await http.get('https://jsonplaceholder.typicode.com/users');
-//     var JsonData = json.decode(data.body);
-
-//     List<User> users = [];
-
-//     for(var u in JsonData){
-//       User user = User(u["id"], u["name"], u["username"], u["email"]);
-//       users.add(user);
-//     }
-
-//     print(users.length);
-//     return users;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(project.title),
-//       ),
-//       body: Container(
-//         child: FutureBuilder(
-//               future: _getUserData(),
-//               builder: (BuildContext context, AsyncSnapshot snapshot) {
-//                   if(snapshot.data ==  null){
-//                     return Container(
-//                       child: Center(
-//                         child: Text("Loading...")
-//                       )
-//                     );
-//                   }
-//                   else{
-//                        return ListView.builder(
-//                         itemCount: snapshot.data.length,
-//                         itemBuilder: (BuildContext context, int index){
-//                           return Card(
-//                             child:Row(
-//                               children: <Widget>[
-//                                  Container(
-//                                    margin: EdgeInsets.all(15),
-//                                    child: CircleAvatar(
-//                                       backgroundImage: NetworkImage(""),
-//                                       radius: 30,
-//                                     ),
-//                                  ),
-//                                   Container(
-//                                     margin: EdgeInsets.only(left: 20),
-//                                     child: Column(
-//                                     children: <Widget>[
-//                                         Text(snapshot.data[index].name,
-//                                             style: TextStyle(
-//                                             // fontWeight: FontWeight.bold,
-//                                             fontSize: 20,
-//                                             fontFamily: 'Times New Roman',
-//                                           ),
-//                                         ),
-//                                         Text(snapshot.data[index].username),
-//                                       ButtonTheme.bar(
-//                                         child: ButtonBar(
-//                                           children: <Widget>[
-//                                             FlatButton(
-//                                               child: const Text('Accept'),
-//                                               onPressed: (){},
-//                                             ),
-//                                             FlatButton(
-//                                               child: const Text('Reject',
-//                                               style: TextStyle(color: Colors.red)),
-//                                               onPressed: (){},
-//                                             )
-//                                           ],
-//                                         )
-//                                       )
-//                                     ]
-//                                 ),
-//                                   )
-//                               ],
-//                             )
-//                           );
-//                       },
-//                     );
-//                   }             
-//               },
-//             ),
-//       ),
-//     );
-//   }
-// }
-
-
-// return ListView.builder(
-//                   itemCount: snapshot.data.length,
-//                   itemBuilder: (BuildContext context, int index){
-//                     return ListTile(
-//                       leading: CircleAvatar(
-//                         backgroundImage: NetworkImage(""),
-//                       ),
-//                       title: Text(snapshot.data[index].name),
-//                       subtitle: Text(snapshot.data[index].email),
-                      
-//                       onTap: (){
-//                       //   Navigator.push(context, 
-//                       //    // new MaterialPageRoute(builder:(context) => DetailPage(snapshot.data[index]))
-//                       //     new MaterialPageRoute(builder:(context)=> SubNotify(snapshot.data[index]))
-//                       // );
-//                       },
-//                     );
-//                   },
-//                 );
-
-//F-up code
-
-// body: Column(
-//         children: <Widget>[
-//           FutureBuilder(
-//               future: _getUserData(),
-//               builder: (BuildContext context, AsyncSnapshot snapshot) {
-//                   if(snapshot.data ==  null){
-//                     return Container(
-//                       child: Center(
-//                         child: Text("Loading...")
-//                       )
-//                     );
-//                   }
-//                   else{
-//                        return ListView.builder(
-//                         itemCount: snapshot.data.length,
-//                         itemBuilder: (BuildContext context, int index){
-//                           return Card(
-//                             child:Row(
-//                               children: <Widget>[
-//                                  Container(
-//                                    margin: EdgeInsets.all(15),
-//                                    child: CircleAvatar(
-//                                       backgroundImage: NetworkImage(""),
-//                                       radius: 30,
-//                                     ),
-//                                  ),
-//                                   Container(
-//                                     margin: EdgeInsets.only(left: 20),
-//                                     child: Column(
-//                                     children: <Widget>[
-//                                         Text(snapshot.data[index].name,
-//                                             style: TextStyle(
-//                                             // fontWeight: FontWeight.bold,
-//                                             fontSize: 20,
-//                                             fontFamily: 'Times New Roman',
-//                                           ),
-//                                         ),
-//                                         Text(snapshot.data[index].username),
-//                                       ButtonTheme.bar(
-//                                         child: ButtonBar(
-//                                           children: <Widget>[
-//                                             FlatButton(
-//                                               child: const Text('Accept'),
-//                                               onPressed: (){},
-//                                             ),
-//                                             FlatButton(
-//                                               child: const Text('Reject',
-//                                               style: TextStyle(color: Colors.red)),
-//                                               onPressed: (){},
-//                                             )
-//                                           ],
-//                                         )
-//                                       )
-//                                     ]
-//                                 ),
-//                                   )
-//                               ],
-//                             )
-//                           );
-//                       },
-//                     );
-//                   }             
-//               },
-//             ),
-          
-//         ],
-//       )

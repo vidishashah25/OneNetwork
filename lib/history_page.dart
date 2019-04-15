@@ -1,32 +1,85 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_page/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'acknowlege.dart';
 import 'dart:async';
 import 'dart:convert';
 
+
 class ViewProject extends StatefulWidget {
   final DataModel project;
-  ViewProject(this.project);  
+  ViewProject(this.project);
   @override
   ViewProjectState createState() => ViewProjectState();
-}
+} 
 
 class ViewProjectState extends State<ViewProject> {
-  
+  SharedPreferences prefs;
+  var userid;
+
+  getdata() async {
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+    //print(userid);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getdata();
+    print(userid);
+    super.initState();
+  }
   //=> fetch Data;
   List<AppliedUser> histories = [];
+
+  Future<String> _sendData(String id, String pid) async {
+  Dio d = new Dio();
+  
+  String url = "http://onenetwork.ddns.net/api/approve_student.php?userid="+id+"&projectid="+pid;
+
+  final response = d.post(url);
+  String ans = response.toString();
+      print(ans);
+
+      var responseJson = jsonDecode(ans);
+
+      var result = responseJson["error"];
+
+      if (result == "false") {
+        print(result);
+        Fluttertoast.showToast(
+            msg: "Accept msg sent",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black87,
+            fontSize: 16.0
+        );
+      }
+
+      return result.toString();
+}
   
   Future<List<AppliedUser>> _getData() async {
-    if(histories.length!=0){
-      AppliedUser temp;
+    if(histories.isEmpty){
+    AppliedUser temp;
     String url = "http://onenetwork.ddns.net/api/view_project_details.php?projectid="+widget.project.id;
     var data = await http.get(url);
     var jsonData = json.decode(data.body);
-    print(jsonData["applied_user_names"].length);
-    for(int i=jsonData["applied_user_names"].length-1;i>=0;i--){
-    temp = new AppliedUser(jsonData["applied_user_names"][i]["applied_user"]);
-    histories.add(temp);
-    }
+        for(int i=0; i < jsonData["applied_user_names"].length;i++){
+        temp = new AppliedUser(
+          jsonData["applied_user_names"][i]["applied_user_name"],
+          jsonData["applied_user_names"][i]["applied_student_id"],
+          widget.project.id,jsonData["applied_users_count"]
+          );
+        histories.add(temp);
+        print(jsonData["applied_user_names"][i]["applied_user_name"]);
+        }
     print(histories.length);
     return histories;
 
@@ -72,7 +125,7 @@ class ViewProjectState extends State<ViewProject> {
                                 child: Text(
                                   widget.project.description+
                                   "\n Technology: "+widget.project.interest_str+
-                                  "\n Creator: "+widget.project.creator),
+                                  "\n Creator: "+widget.project.creator_name),
                               ),
                               // Icon(Icons.description)
                             ],
@@ -100,7 +153,7 @@ class ViewProjectState extends State<ViewProject> {
                       shrinkWrap: true,
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index){
-                        return _historyWidget(snapshot.data[index]);
+                          return _historyWidget(snapshot.data[index]);
                       },
                     );
                   }
@@ -114,8 +167,8 @@ class ViewProjectState extends State<ViewProject> {
   }
 
   Widget _historyWidget(AppliedUser history) {
-    return Container(
-//      height: 100.0,
+    if(widget.project.creator == userid){
+      return Container(
       margin: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
       child: Card(
         child: Padding(
@@ -140,7 +193,6 @@ class ViewProjectState extends State<ViewProject> {
                                     children: <Widget>[
                                         Text(history.user,
                                             style: TextStyle(
-                                            // fontWeight: FontWeight.bold,
                                             fontSize: 18,
                                             fontFamily: 'Times New Roman',
                                           ),
@@ -150,7 +202,9 @@ class ViewProjectState extends State<ViewProject> {
                                           children: <Widget>[
                                             FlatButton(
                                               child: const Text('Accept'),
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                _sendData(history.id,history.pid);
+                                              },
                                             ),
                                             FlatButton(
                                               child: const Text('Reject',
@@ -165,18 +219,6 @@ class ViewProjectState extends State<ViewProject> {
                                   )
                               ],
                             ),
-                          
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     Text(
-                  //       history.user,
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //       textAlign: TextAlign.left,
-                  //     ),
-                  //   ],
-                  // ),
                 ),
               ),
             ],
@@ -184,15 +226,62 @@ class ViewProjectState extends State<ViewProject> {
         ),
       ),
     );
+  }
+  else{
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                            child:Row(
+                              children: <Widget>[
+                                 Container(
+                                   margin: EdgeInsets.all(15),
+                                   child: CircleAvatar(
+                                      backgroundImage: NetworkImage(""),
+                                      radius: 25,
+                                    ),
+                                 ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20),
+                                    child: Column(
+                                    children: <Widget>[
+                                        Text(history.user,
+                                            style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Times New Roman',
+                                          ),
+                                        ),
+                                    ]
+                                ),
+                                  )
+                              ],
+                            ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  
 
+  }
   }
 }
 
 class AppliedUser {
 
   final String user;
-
-  AppliedUser(this.user);
+  final String id;
+  final String pid;
+  final int count;
+  AppliedUser(this.user, this.id, this.pid, this.count);
 }
 
 

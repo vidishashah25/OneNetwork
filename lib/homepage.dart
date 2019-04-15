@@ -144,8 +144,10 @@ class _feedState extends State<feed> {
       var data =
       await http.get('http://onenetwork.ddns.net/api/display_projects.php');
       var jsonData = json.decode(data.body);
-      i = jsonData["projects"].length;
-      print(jsonData["projects"][0]["project"]["id"]);
+      // i = jsonData["projects"].length;
+      // print('HI');
+      // print(jsonData["projects"][0]["creator_name"]);
+      // print(jsonData["projects"][0]["creator_name"]);
     
       for (int i = 0; i < jsonData["projects"].length; i++) {
         temp = new DataModel(
@@ -155,10 +157,11 @@ class _feedState extends State<feed> {
           jsonData["projects"][i]["project"]["creator"],
           jsonData["projects"][i]["project"]["mentor"],
           jsonData["projects"][i]["interest_str"],
+          jsonData["projects"][i]["creator_name"]
           );
         print('reached');
         histories.add(temp);
-        print(temp.id);
+        print(temp.creator_name);
       }
     }
     return histories;
@@ -184,7 +187,14 @@ class _feedState extends State<feed> {
                 return Card(
                   child: Column(
                     children: <Widget>[
-                      Text(snapshot.data[index].title+"\n",
+                        Text("Proposed By: "+snapshot.data[index].creator_name+"\n",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 18.0,
+                          fontFamily: 'times new roman',
+                        ),
+                        ),
+                      Text("Project: "+snapshot.data[index].title+"\n",
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 18.0,
@@ -198,7 +208,7 @@ class _feedState extends State<feed> {
                           fontFamily: 'times new roman',
                         ),
                       ),
-                      Text(snapshot.data[index].description,
+                      Text("\nAbout Project: "+snapshot.data[index].description,
                       style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -249,7 +259,14 @@ class _feedState extends State<feed> {
                 return Card(
                   child: Column(
                     children: <Widget>[
-                      Text(snapshot.data[index].title+"\n",
+                      Text("Proposed By: "+snapshot.data[index].creator_name+"\n",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 18.0,
+                        fontFamily: 'times new roman',
+                      ),
+                      ),
+                      Text("Project: "+snapshot.data[index].title+"\n",
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 18.0,
@@ -263,7 +280,7 @@ class _feedState extends State<feed> {
                           fontFamily: 'times new roman',
                         ),
                       ),
-                      Text(snapshot.data[index].description,
+                      Text("\nAbout Project: "+snapshot.data[index].description,
                       style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14.0,
@@ -334,10 +351,11 @@ class DataModel {
   final String creator;
   final String mentor;
   final String interest_str;
+  final String creator_name;
 
   // final Address address;
 
-  DataModel(this.id, this.title, this.description, this.creator, this.mentor, this.interest_str);
+  DataModel(this.id, this.title, this.description, this.creator, this.mentor, this.interest_str, this.creator_name);
 }
 
 
