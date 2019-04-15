@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/history_page.dart';
+import 'package:login_page/main.dart';
 import 'package:login_page/userprofile.dart';
 import 'package:login_page/post.dart';
 import 'package:login_page/searchView.dart';
@@ -98,7 +99,8 @@ class HomePageState extends State<HomePage> {
                 title: Text('Log Out'),
                 leading: new Icon(Icons.power_settings_new),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                    builder: (BuildContext) => LoginPage()));
                 }),
           ],
         ),
@@ -175,9 +177,10 @@ class _feedState extends State<feed> {
               ),
             );
           } else {
-            return ListView.builder(
+              return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
+                if(snapshot.data[index].creator != userid){
                 return Card(
                   child: Column(
                     children: <Widget>[
@@ -232,7 +235,7 @@ class _feedState extends State<feed> {
                                 Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => HistoryPage(snapshot.data[index])));
+                                  builder: (BuildContext context) => ViewProject(snapshot.data[index])));
 
                               },
                             ),
@@ -241,6 +244,72 @@ class _feedState extends State<feed> {
                     ],
                   ),
                 );
+              }
+              else{
+                return Card(
+                  child: Column(
+                    children: <Widget>[
+                      Text(snapshot.data[index].title+"\n",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 18.0,
+                        fontFamily: 'times new roman',
+                      ),
+                      ),
+                      Text("Technology: "+snapshot.data[index].interest_str,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                          fontFamily: 'times new roman',
+                        ),
+                      ),
+                      Text(snapshot.data[index].description,
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                          fontFamily: 'times new roman',
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                        // FlatButton(
+                        //     child: Text("Apply",
+                        //     style: TextStyle(
+                        //       color: Colors.blue,
+                        //       fontSize: 14,
+                        //       fontFamily: 'times new Roman',
+                        //     ),
+                        //     ),
+                        //     onPressed: (){
+                        //       Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (BuildContext context) => Apply(snapshot.data[index])));
+                        //     },
+                        // ),
+                         FlatButton(
+                              child: Text("More>>",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 14,
+                                fontFamily: 'times new Roman',
+                              ),
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => ViewProject(snapshot.data[index])));
+
+                              },
+                            ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }
               },
             );
           }

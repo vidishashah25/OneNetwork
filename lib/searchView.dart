@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:login_page/homepage.dart';
 // import 'package:login_page/homepage.dart';
 
 
@@ -56,10 +57,13 @@ class _ExamplePageState extends State<ExamplePage> {
     return new AppBar(
       centerTitle: true,
       title: _appBarTitle,
-      leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: _searchPressed,
-      ),
+      actions: <Widget>[
+          new IconButton(
+            icon: _searchIcon,
+            onPressed: _searchPressed,
+          ),
+        
+      ],
     );
   }
 
@@ -106,7 +110,7 @@ class _ExamplePageState extends State<ExamplePage> {
           );
         } else {
           this._searchIcon = new Icon(Icons.search);
-          this._appBarTitle = new Text( 'Search Example' );
+          this._appBarTitle = new Text( 'Search Here' );
           filteredNames = names;
           _filter.clear();
         }

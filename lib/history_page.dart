@@ -4,32 +4,33 @@ import 'package:login_page/homepage.dart';
 import 'dart:async';
 import 'dart:convert';
 
-class HistoryPage extends StatefulWidget {
+class ViewProject extends StatefulWidget {
   final DataModel project;
-  HistoryPage(this.project);  
+  ViewProject(this.project);  
   @override
-  HistoryPageState createState() => HistoryPageState();
+  ViewProjectState createState() => ViewProjectState();
 }
 
-class HistoryPageState extends State<HistoryPage> {
-  // HistoryPage(this.project); 
+class ViewProjectState extends State<ViewProject> {
+  
   //=> fetch Data;
-  List<HistoryModel> histories = [];
-  Future<List<HistoryModel>> _getData() async {
-    HistoryModel temp;
-    
-    var data = await http.get('http://onenetwork.ddns.net/api/display_projects.php');
+  List<AppliedUser> histories = [];
+  
+  Future<List<AppliedUser>> _getData() async {
+    if(histories.length!=0){
+      AppliedUser temp;
+    String url = "http://onenetwork.ddns.net/api/view_project_details.php?projectid="+widget.project.id;
+    var data = await http.get(url);
     var jsonData = json.decode(data.body);
-    print(jsonData["projects"].length);
-    for(int i=0;i<jsonData["projects"].length;i++){
-      print(jsonData["projects"][i]["id"]);
-      temp= new HistoryModel(jsonData["projects"][i]["id"], jsonData["projects"][i]["title"],);
-      print('reached');
-      histories.add(temp);
-      print(temp.id);
+    print(jsonData["applied_user_names"].length);
+    for(int i=jsonData["applied_user_names"].length-1;i>=0;i--){
+    temp = new AppliedUser(jsonData["applied_user_names"][i]["applied_user"]);
+    histories.add(temp);
+    }
+    print(histories.length);
+    return histories;
 
     }
-    return histories;
   }
 
   @override
@@ -112,7 +113,7 @@ class HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _historyWidget(HistoryModel history) {
+  Widget _historyWidget(AppliedUser history) {
     return Container(
 //      height: 100.0,
       margin: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
@@ -121,22 +122,61 @@ class HistoryPageState extends State<HistoryPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: <Widget>[
-
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        history.id.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(history.title)
-                    ],
-                  ),
+                            child:Row(
+                              children: <Widget>[
+                                 Container(
+                                   margin: EdgeInsets.all(15),
+                                   child: CircleAvatar(
+                                      backgroundImage: NetworkImage(""),
+                                      radius: 25,
+                                    ),
+                                 ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20),
+                                    child: Column(
+                                    children: <Widget>[
+                                        Text(history.user,
+                                            style: TextStyle(
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            fontFamily: 'Times New Roman',
+                                          ),
+                                        ),
+                                      ButtonTheme.bar(
+                                        child: ButtonBar(
+                                          children: <Widget>[
+                                            FlatButton(
+                                              child: const Text('Accept'),
+                                              onPressed: (){},
+                                            ),
+                                            FlatButton(
+                                              child: const Text('Reject',
+                                              style: TextStyle(color: Colors.red)),
+                                              onPressed: (){},
+                                            )
+                                          ],
+                                        )
+                                      )
+                                    ]
+                                ),
+                                  )
+                              ],
+                            ),
+                          
+                  // child: Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       history.user,
+                  //       style: TextStyle(fontWeight: FontWeight.bold),
+                  //       textAlign: TextAlign.left,
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
             ],
@@ -148,12 +188,11 @@ class HistoryPageState extends State<HistoryPage> {
   }
 }
 
-class HistoryModel {
+class AppliedUser {
 
-  final String id;
-  final String title;
+  final String user;
 
-  HistoryModel(this.id, this.title);
+  AppliedUser(this.user);
 }
 
 
