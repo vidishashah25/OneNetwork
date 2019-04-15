@@ -167,7 +167,8 @@ final _pd = ProjectData();
                       onChanged: (val){
                         setState(() {
                         _pd.technology[ProjectData.Java] = val;
-                        });
+                          }
+                        );
                       },
                     ),
                     CheckboxListTile(

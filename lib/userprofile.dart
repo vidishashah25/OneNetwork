@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:async/async.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_page/changeuserprofile.dart';
 import 'package:login_page/updateresume.dart';
-
+import 'package:image_picker/image_picker.dart';
 class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -11,7 +14,10 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   String name;
+  String uid;
+  String lastname;
   var userprofile = null;
+  var resumelink=null;
   void initState() {
     getusername();
   }
@@ -32,32 +38,71 @@ class _UserProfileState extends State<UserProfile> {
         child: CircularProgressIndicator(),
       );
     } else {
-      return Container(
-        width: 150.0,
-        height: 150.0,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          image: DecorationImage(
-            image: NetworkImage(
-              '$userprofile',
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: 150.0,
+            height: 150.0,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              image: DecorationImage(
+                image: NetworkImage(
+                  '$userprofile',
+                ),
+                fit: BoxFit.cover,
+
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(75.0)),
+              boxShadow: [BoxShadow(blurRadius: 7.0, color: Colors.black)],
             ),
-            fit: BoxFit.cover,
+
           ),
-          borderRadius: BorderRadius.all(Radius.circular(75.0)),
-          boxShadow: [BoxShadow(blurRadius: 7.0, color: Colors.black)],
-        ),
+          GestureDetector(
+            onTap: ()=>_showImagePicker(context,ImageSource.gallery),
+            child: Container(
+                height: 30.0,
+                width: 30.0,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                   borderRadius: BorderRadius.all(Radius.circular(75.0),),
+                    border: new Border.all(color: Colors.white)
+                ),
+                margin: EdgeInsets.only(left: 110.0,top: 120.0),
+                child: Padding(
+                  padding: EdgeInsets.all(1.0),
+                  child: Icon(Icons.add,color: Colors.white,size: 20.0,),
+                ),
+
+            ),
+          ),
+        ],
+
       );
     }
   }
 
   Future<String> getusername() async {
-    var url = await http.get("https://api.github.com/users/vishweshsoni");
-    var responseJson = json.decode(url.body);
-    var name1 = responseJson['login'];
-    var image = responseJson['avatar_url'];
+//    var url = await http.get("https://api.github.com/users/vishweshsoni");
+//    var responseJson = json.decode(url.body);
+//    var name1 = responseJson['login'];
+//    var image = responseJson['avatar_url'];
+    Dio dio= new Dio();
+    final response = await dio.get("http://onenetwork.ddns.net/api/get_user_details.php?userid=201812017");
+    String ans = response.toString();
+    print(ans);
+    var responseJson = jsonDecode(ans);
+    var name1= responseJson['user_details']['firstname'];
+    var name2= responseJson['user_details']['lastname'];
+    var image = responseJson['user_details']['profile_pic'];
+    var id= responseJson['user_details']['id'];
+    var resume1= responseJson['user_details']['resume'];
     setState(() {
+
       name = name1;
+      lastname= name2;
       userprofile = image;
+      uid= id;
+      resumelink = resume1;
     });
   }
 
@@ -70,16 +115,25 @@ class _UserProfileState extends State<UserProfile> {
             child: Container(color: Colors.blue.withOpacity(0.8)),
             clipper: getClipper(),
           ),
-
           Positioned(
             width: 350.0,
-            top: MediaQuery.of(context).size.height / 8,
+            top: MediaQuery.of(context).size.height/13,
+            left: MediaQuery.of(context).size.width/26,
             child: Column(
+
               children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 10.0),
+                  alignment: FractionalOffset.topLeft,
+                  child: GestureDetector(
+                    onTap: ()=>{Navigator.pop(context)},
+                    child: Icon(Icons.arrow_back,color: Colors.white,size: 30.0,),
+                  ),
+                ),
                 Widget_getImage(),
                 SizedBox(height: 5.0),
                 Text(
-                  '$name',
+                  '$name $lastname',
                   style: TextStyle(
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
@@ -104,9 +158,7 @@ class _UserProfileState extends State<UserProfile> {
                                           child: Text('Student Id',textAlign: TextAlign.center,),
                                         ),
                                         SizedBox(width: 2.0),
-                                        Text('201812101'),
-
-
+                                        Text('$uid'),
                                     ],
                                 ),
                             ),
@@ -127,7 +179,7 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                   SizedBox(width: 2.0,),
                                   SizedBox(width: 2.0),
-                                  Text('201812101@daiict.ac.in'),
+                                  Text('$uid@daiict.ac.in'),
 
                                 ],
                               ),
@@ -225,7 +277,7 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                 ),
-//                           
+//
               ],
             ),
           ),
@@ -277,7 +329,42 @@ class _UserProfileState extends State<UserProfile> {
 
 
 
+  void _showImagePicker(BuildContext context,ImageSource source){
+    ImagePicker.pickImage(source: source).then((_image) async {
+      Dio dio = new Dio();
+      print(_image);
+      FormData formData = new FormData();
+      formData.add("file1",
+          UploadFileInfo(_image, _image.path));
+      final response = await dio.post(
+          'http://onenetwork.ddns.net/api/user_profile_update_image.php?userid=201812017',
+          data: formData);
+      var re = jsonDecode(response.toString());
+      var results= re["error"];
 
+//
+//      var result;
+//      String path= _image.path;
+//      var stream = new http.ByteStream(DelegatingStream.typed(_image.openRead()));
+//      var length = await _image.length();
+//      var uri = Uri.parse('http://onenetwork.ddns.net/api/user_profile_update_image.php?userid=201812017');
+//      var request = new http.MultipartRequest("POST", uri);
+//      var multipartFile = new http.MultipartFile('file1',stream, length, filename: path);
+//      request.files.add(multipartFile);
+//      var response = await request.send();
+//
+//      print(" ===================response code ${response.statusCode}");
+//      await response.stream.transform(utf8.decoder).listen((value) {
+//        print(" =====================response value $value");
+//        result = value;
+//      });
+
+      if (_image != null && results=="false")
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => UserProfile()));
+    }).catchError((err) => print(err));
+
+  }
 
   void showAlertDialog(BuildContext context){
       showDialog(
@@ -405,4 +492,6 @@ class getClipper extends CustomClipper<Path> {
     // TODO: implement shouldReclip
     return true;
   }
+
 }
+

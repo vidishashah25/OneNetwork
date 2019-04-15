@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:login_page/userprofile.dart';
 class UpdateResume extends StatefulWidget {
   @override
   _UpdateResumeState createState() => _UpdateResumeState();
@@ -20,14 +23,13 @@ class _UpdateResumeState extends State<UpdateResume> {
             margin: EdgeInsets.only(left: 65.0,right: 65.0),
             color: Colors.blue,
             child: FlatButton(
-                onPressed: ()=>_getFile(),
+                onPressed: ()=>_getFile(context),
                 child: Text('Upload',style: TextStyle(color: Colors.white),),
             ),
           ),
           FlatButton(
           onPressed: ()=>
           Navigator.of(context).pop(),
-
           child: Text('Ok'),
           ),
         ],
@@ -35,8 +37,23 @@ class _UpdateResumeState extends State<UpdateResume> {
   }
 }
 
-_getFile() async {
+_getFile(BuildContext context) async {
 
-  File file = await FilePicker.getFile(type: FileType.CUSTOM,fileExtension:'pdf'); // will return a File object directly from the selected file
+  File file1 = await FilePicker.getFile(type: FileType.CUSTOM,fileExtension:'pdf'); // will return a File object directly from the selected file
+  Dio dio = new Dio();
+  print(file1);
+  FormData formData = new FormData();
+  formData.add("file",
+      UploadFileInfo(file1, file1.path));
+  final response = await dio.post(
+      'http://http://onenetwork.ddns.net/api/user_profile_update_resume.php?userid=201812017',
+      data: formData);
+  var re = jsonDecode(response.toString());
+  var results= re["error"];
+
+  if (file1 != null && results=="false") {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => UserProfile()));
+   }
 
 }

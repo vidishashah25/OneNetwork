@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/history_page.dart';
+import 'package:login_page/newhome.dart';
 import 'package:login_page/userprofile.dart';
 import 'package:login_page/post.dart';
 import 'naviRoute.dart';
@@ -71,12 +72,14 @@ class HomePageState extends State<HomePage> {
             new ListTile(
                 title: new Text('Add Post'),
                 leading: new Icon(Icons.edit),
-//                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post()))
-                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext) => HistoryPage()))),
+                onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>Post())),
+//                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+//                    builder: (BuildContext) => HistoryPage()))
+            ),
             new ListTile(
               title: Text('Posted Projects'),
               leading: new Icon(Icons.description),
+              onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext)=>NewHomePage())),
             ),
             new ListTile(
               title: Text('Applied Projects'),
@@ -149,28 +152,30 @@ class _feedState extends State<feed> {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage("url"),
-                  radius: 25.0,
-                ),
-                title: Text(
-                  snapshot.data[index].title,
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontFamily: 'Times New Roman',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage("url"),
+                    radius: 25.0,
                   ),
-                ),
-                subtitle: Text(
-                  snapshot.data[index].description,
-                  style: TextStyle(
-                    fontSize: 15.0,
+                  title: Text(
+                    snapshot.data[index].title,
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontFamily: 'Times New Roman',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
                   ),
-                ),
-              );
-            },
+                  subtitle: Text(
+                    snapshot.data[index].description,
+                    style: TextStyle(
+                      fontSize: 15.0,
+                    ),
+                  ),
+                );
+              },
+
           );
         }
       },
