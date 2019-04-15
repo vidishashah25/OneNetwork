@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 //All Notification
 
@@ -23,8 +25,25 @@ class Notify extends StatefulWidget {
 
 class _NotifyState extends State<Notify> {
 
+  SharedPreferences prefs;
+  var userid;
+
+  getdata() async {
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+    //print(userid);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getdata();
+    // print(userid);
+    super.initState();
+  }
+
   Future<List<Project>> _getProjects() async {
-    var data = await http.get('https://jsonplaceholder.typicode.com/posts');
+    var data = await http.get('http://onenetwork.ddns.net/api/view_notifications.php?userid=201812017');
     var JsonData = json.decode(data.body);
 
     List<Project> projects = [];

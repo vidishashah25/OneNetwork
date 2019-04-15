@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:login_page/homepage.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class HistoryPage extends StatefulWidget {
+  final DataModel project;
+  HistoryPage(this.project);  
   @override
   HistoryPageState createState() => HistoryPageState();
 }
 
 class HistoryPageState extends State<HistoryPage> {
+  // HistoryPage(this.project); 
   //=> fetch Data;
   List<HistoryModel> histories = [];
   Future<List<HistoryModel>> _getData() async {
     HistoryModel temp;
-
-//    var data = await http.get('http://onenetwork.ddns.net/api/view_project_details.php?projectid=4');
+    
     var data = await http.get('http://onenetwork.ddns.net/api/display_projects.php');
     var jsonData = json.decode(data.body);
     print(jsonData["projects"].length);
@@ -26,16 +29,6 @@ class HistoryPageState extends State<HistoryPage> {
       print(temp.id);
 
     }
-
-//    for(var u in jsonData){
-//      print('hi');
-//
-//
-
-//      print(u["address"]["street"]);
-    //}
-
-
     return histories;
   }
 
@@ -55,7 +48,7 @@ class HistoryPageState extends State<HistoryPage> {
               padding:
               const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
               child: Text(
-                'Project Title',
+                widget.project.title,
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
               ),
             ),
@@ -75,7 +68,10 @@ class HistoryPageState extends State<HistoryPage> {
                           child: Column(
                             children: <Widget>[
                               Expanded(
-                                child: Text("Project Description"),
+                                child: Text(
+                                  widget.project.description+
+                                  "\n Technology: "+widget.project.interest_str+
+                                  "\n Creator: "+widget.project.creator),
                               ),
                               // Icon(Icons.description)
                             ],
@@ -156,10 +152,6 @@ class HistoryModel {
 
   final String id;
   final String title;
-//  final String description;
-//  final String creator;
-
-  // final Address address;
 
   HistoryModel(this.id, this.title);
 }

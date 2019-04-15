@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:login_page/main.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -15,69 +16,67 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 SharedPreferences prefs;
-var userid = "201812074"; //comment this when login starts working for @taher
-
+var userid;
 
 @override
 void initState(){
   //-> uncomment this when login starts working for @taher
-    //_getData1();
+    _getData1();
     _getdata();
 
     super.initState();
 }
+  void _getData1() async{
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+  }
 
-//-> uncomment this when login starts working for @taher
-  // void _getData1() async{
-  //   prefs = await SharedPreferences.getInstance();
-  //   userid = prefs.getString("userid");
-  // }
-
-Future<String> _postData(String name,String description) async {
+Future<String> _postData(String name,String description,String val) async {
       Dio dio = new Dio();
-print(name);
-print(description);
-print(userid);
-      FormData formData = new FormData.from({
-        "title": name,
-        "description": description,
-        "userid": userid,
-        "project_type": 102
-      });
-      final response = await dio
-          .post("http://onenetwork.ddns.net/api/post_project.php", data: formData);
-      String ans = response.toString();
-      print(ans);
-      var responseJson = jsonDecode(ans);
-      var result = responseJson["error"];
+      print(name);
+      print(description);
+      print(userid);
+      print(val);
 
-      if (result == "false") {
-        Fluttertoast.showToast(
-            msg: "Post has been added",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIos: 1,
-            backgroundColor: Colors.grey,
-            textColor: Colors.black87,
-            fontSize: 16.0);
-      }
+      // FormData formData = new FormData.from({
+      //   "title": name,
+      //   "description": description,
+      //   "userid": userid,
+      //   "project_type": 102
+      // });
+      // final response = await dio
+      //     .post("http://onenetwork.ddns.net/api/post_project.php", data: formData);
+      // String ans = response.toString();
+      // print(ans);
+      // var responseJson = jsonDecode(ans);
+      // var result = responseJson["error"];
+
+      // if (result == "false") {
+      //   Fluttertoast.showToast(
+      //       msg: "Post has been added",
+      //       toastLength: Toast.LENGTH_SHORT,
+      //       gravity: ToastGravity.CENTER,
+      //       timeInSecForIos: 1,
+      //       backgroundColor: Colors.grey,
+      //       textColor: Colors.black87,
+      //       fontSize: 16.0);
+      // }
+      var result ="nothing";
       return result;
     }
 
-    // void initState(){
-    //  _getdata();
-    // }
-
-  List<String> l =new List(3);
+    List<String> l =new List(3);
     List<String> lname =new List(3);
     Map<int,String> mp = new Map<int,String>();
     void _getdata() async{
         Dio dio = new Dio();
-        final response=await dio.get("http://onenetwork.ddns.net/api/interests.php");
+        final response = await dio.get("http://onenetwork.ddns.net/api/interests.php");
         String ans = response.toString();
         var data = jsonDecode(ans);
-        //print(data["interests"][0]["interests_array"][0]["name"]);
-        //instead of 3 put count, Don't worry pratik will send in api.
+
+//print(data["interests"][0]["interests_array"][0]["name"]);
+//instead of 3 put count, Don't worry Pratik will send in api.
+        
         for(int i=0;i<3;i++){
           l[i]=data["interests"][0]["interests_array"][i]["id"];
           lname[i]=data["interests"][0]["interests_array"][i]["name"];
@@ -85,33 +84,56 @@ print(userid);
           print(l);
           print(lname);
     }
-    
-int _selected = 0;
-  onChanged(int value){
-      setState(() {
-      _selected = value; 
-      });
 
-      print('value = $value');
+
+  List<ProjectType> _getProjectTypes() {
+    List<ProjectType> ptype = [];
+    ProjectType temp;
+    Dio dio = new Dio();
+      var data =
+       dio.get('http://onenetwork.ddns.net/api/get_project_types.php');
+      var jsonData = json.decode(data.toString());
+      print(jsonData);
+      
+      for(var u in jsonData){
+        ProjectType p = ProjectType(u["id"], u["name"]);
+        ptype.add(p);
+      }
+    print(ptype);
+    return ptype;    
   }
 
-List<Widget> makeRadio(){
+
+
+ int _value2 = 0;
+ void _setvalue2(int value) => setState(() => 
+ _value2 = value
+ );
+
+Widget makeRadioTiles() {  
   List<Widget> list = new List<Widget>();
+  // List<ProjectType> ptype = _getProjectTypes();
+  // print(ptype);
+    int val=101;
+      for(int i = 0; i < 2; i++){
+        list.add(new RadioListTile(
+          value: val++,
+          groupValue: _value2,
+          onChanged: _setvalue2,
+          activeColor: Colors.green,
+          controlAffinity: ListTileControlAffinity.trailing,
+          title: new Text('Summer'),
+        ));
+   }
 
-  for(int i=0; i<3; i++){
-    list.add(new Row(
-    children: <Widget>[
-      new Text('radio $i'),
-      new Radio(value: i, groupValue: _selected, onChanged: (int value){onChanged(value);},)
-    ],
-  ));
-  
-  }
-  return list;
-}
+   Column column = new Column(children: list,);
+   return column;
+ }
 
 final _formKey = GlobalKey<FormState>();
 final _pd = ProjectData();
+TextEditingController _title = new TextEditingController();
+TextEditingController _description = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +162,8 @@ final _pd = ProjectData();
                       decoration: 
                       InputDecoration(labelText: 'Project Title'),
                         autocorrect: true,
-                        autofocus: true,
+                        // autofocus: true,
+                        controller: _title,
                         validator: (value){
                           if(value.isEmpty){
                             return 'Please enter your Project Title';
@@ -153,14 +176,14 @@ final _pd = ProjectData();
                       decoration: 
                       InputDecoration(labelText: 'Project Description',),
                         autocorrect: true,
-                        autofocus: true,
+                        // autofocus: true,
+                        controller: _description,
                         maxLines: 3,
                         validator: (value){
                           if(value.isEmpty){
                             return 'Please enter your Project Description';
                           }
                         },
-                        onSaved: (val) => setState(() => _pd.description = val) ,
                     ),
 //Project Technology
                     Container(
@@ -203,21 +226,37 @@ final _pd = ProjectData();
 //radio button  
                     Container(
                       padding: new EdgeInsets.fromLTRB(3, 20, 20, 20),
-                      child: Text('Project Type',
+                      child: Text('Project Type(Internship)',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Times New Roman',
                         color: Colors.blue,
-
                       ),
                       ),
                     ),
                     Container(
                       padding: new EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: Center(
-                        child: Column(
-                          children: makeRadio(),
-                        ),
+                           child: Column(
+                                children: <Widget>[
+                                  RadioListTile(
+                                        value: 101,
+                                        groupValue: _value2,
+                                        onChanged: _setvalue2,
+                                        activeColor: Colors.green,
+                                        controlAffinity: ListTileControlAffinity.trailing,
+                                        title: new Text('Winter'),
+                                      ),
+                                      RadioListTile(
+                                        value: 102,
+                                        groupValue: _value2,
+                                        onChanged: _setvalue2,
+                                        activeColor: Colors.green,
+                                        controlAffinity: ListTileControlAffinity.trailing,
+                                        title: new Text('Summer'),
+                                      ),
+                                ],
+                              )
                       ),
                   ),
 //Submit button                    
@@ -229,8 +268,8 @@ final _pd = ProjectData();
                        onPressed: (){
                          final form = _formKey.currentState;
                          if(form.validate()){
-                           _postData(_pd.name,_pd.description);
-                           form.save();
+                           _postData(_title.text,_description.text,_value2.toString());
+                           //form.save();
                          } 
                        },
                        padding: const EdgeInsets.all(8.0),
@@ -253,9 +292,12 @@ final _pd = ProjectData();
       ),
     );
   }
-  // _showDialog(BuildContext context){
-  //   Scaffold.of(context).showSnackBar(SnackBar(content: Text('New Post Added')));
-  // }
+}
+
+class ProjectType {
+  final String name;
+  final int id; 
+  ProjectType(this.id, this.name);
 }
 
 

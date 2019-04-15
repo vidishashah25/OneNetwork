@@ -78,27 +78,28 @@ class _LoginPageState extends State<LoginPage> {
         width:  MediaQuery.of(context).size.width/2,
     );
 
-    //   final emailField =TextField(
-    //   controller: emailController,
-    //   style: style,
-    //   decoration: InputDecoration(
-    //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-    //       hintText: "Email",
-    //       border:
-    //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    final emailField = TextField(
+      controller: emailController,
+      obscureText: false,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Email",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
-    // );
+    );
 
-    // final passwordField = TextField(
-    //   controller: passwordController,
-    //   obscureText: true,
-    //   style: style,
-    //   decoration: InputDecoration(
-    //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-    //       hintText: "Password",
-    //       border:
-    //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    // );
+    final passwordField = TextField(
+      controller: passwordController,
+      obscureText: true,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Password",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
 
     final loginButon = Material(
       elevation: 5.0,
@@ -110,7 +111,9 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           //Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
         _getSignin(emailController.text,passwordController.text);
-        
+        // if(login){
+//          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+        // }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -135,41 +138,9 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   imageField,
-                  
-                  TextField(
-                    controller: emailController,
-                    style: style,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Email",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-                  ),
-                  
+                  emailField,
                   SizedBox(height: MediaQuery.of(context).size.width/15),
-
-                  TextField(
-                    controller: passwordController,
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87),                   
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Password",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
-                  ),
-                  
-                  // TextField(
-                  //   controller: passwordController,
-                  //   obscureText: true,
-                  //   style: style,
-                  //   decoration: InputDecoration(
-                  //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //       hintText: "Password",
-                  //       border:
-                  //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-                  // ),
+                  passwordField,
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   loginButon,
                   SizedBox(
