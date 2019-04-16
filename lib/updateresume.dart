@@ -44,16 +44,18 @@ _getFile(BuildContext context) async {
   print(file1);
   FormData formData = new FormData();
   formData.add("file",
-      UploadFileInfo(file1, file1.path));
+      UploadFileInfo(file1, file1.path+'.pdf'));
   final response = await dio.post(
-      'http://http://onenetwork.ddns.net/api/user_profile_update_resume.php?userid=201812017',
+      'http://onenetwork.ddns.net/api/user_profile_update_resume.php?userid=201812017',
       data: formData);
   var re = jsonDecode(response.toString());
+  print(re);
+  print(file1);
   var results= re["error"];
 
   if (file1 != null && results=="false") {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => UserProfile()));
-   }
+    Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => UserProfile()));
+  }
 
 }
