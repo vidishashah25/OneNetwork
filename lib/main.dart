@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:login_page/login_final.dart';
 import 'package:login_page/userprofile.dart';
 import 'package:http/http.dart' as http;
 import 'homepage.dart';
@@ -18,10 +19,12 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
 
       debugShowCheckedModeBanner: false,
-        home: new LoginPage(),
+        home: new Login1(),
         theme: new ThemeData(primarySwatch: Colors.blue));
   }
 }
+
+//below class is not in use right now
 
 class LoginPage extends StatefulWidget {
   @override
@@ -68,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
+      TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87);
 
 
     final imageField= Image(

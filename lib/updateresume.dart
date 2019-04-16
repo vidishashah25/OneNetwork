@@ -5,12 +5,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/userprofile.dart';
 class UpdateResume extends StatefulWidget {
+  String uid;
+  UpdateResume(this.uid);
   @override
-  _UpdateResumeState createState() => _UpdateResumeState();
+  _UpdateResumeState createState() => _UpdateResumeState(this.uid);
 }
 
 class _UpdateResumeState extends State<UpdateResume> {
-
+  String uid;
+  _UpdateResumeState(this.uid);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class _UpdateResumeState extends State<UpdateResume> {
             margin: EdgeInsets.only(left: 65.0,right: 65.0),
             color: Colors.blue,
             child: FlatButton(
-                onPressed: ()=>_getFile(context),
+                onPressed: ()=>_getFile(context,uid),
                 child: Text('Upload',style: TextStyle(color: Colors.white),),
             ),
           ),
@@ -37,7 +40,7 @@ class _UpdateResumeState extends State<UpdateResume> {
   }
 }
 
-_getFile(BuildContext context) async {
+_getFile(BuildContext context,String id) async {
 
   File file1 = await FilePicker.getFile(type: FileType.CUSTOM,fileExtension:'pdf'); // will return a File object directly from the selected file
   Dio dio = new Dio();
@@ -55,7 +58,7 @@ _getFile(BuildContext context) async {
 
   if (file1 != null && results=="false") {
     Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => UserProfile()));
+          MaterialPageRoute(builder: (context) => UserProfile(id)));
   }
 
 }

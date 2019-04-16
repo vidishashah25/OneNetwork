@@ -10,18 +10,29 @@ import 'package:login_page/updateresume.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class UserProfile extends StatefulWidget {
+  var studentid;
+  UserProfile(this.studentid);
   @override
-  _UserProfileState createState() => _UserProfileState();
+  _UserProfileState createState() => _UserProfileState(studentid);
 }
-
 class _UserProfileState extends State<UserProfile> {
+
   String name;
   String uid;
+  _UserProfileState(this.uid);
   String lastname;
   var userprofile = null;
   var resumelink=null;
+
+
+
+  SharedPreferences prefs;
+
+
   void initState() {
     getusername();
+
+    print(uid);
   }
 
 
@@ -37,7 +48,7 @@ class _UserProfileState extends State<UserProfile> {
 
   Widget_getImage(){
     if (userprofile == null) {
-      return Container(
+      return Container  (
         width: 150.0,
         height: 150.0,
         decoration: BoxDecoration(
@@ -96,7 +107,7 @@ class _UserProfileState extends State<UserProfile> {
 //    var name1 = responseJson['login'];
 //    var image = responseJson['avatar_url'];
     Dio dio= new Dio();
-    final response = await dio.get("http://onenetwork.ddns.net/api/get_user_details.php?userid=201812017");
+    final response = await dio.get("http://onenetwork.ddns.net/api/get_user_details.php?userid=$uid");
     String ans = response.toString();
     print(ans);
     var responseJson = jsonDecode(ans);
@@ -336,7 +347,7 @@ class _UserProfileState extends State<UserProfile> {
 
       if (_image != null && results=="false")
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => UserProfile()));
+            MaterialPageRoute(builder: (context) => UserProfile(uid)));
     }).catchError((err) => print(err));
 
   }
@@ -351,7 +362,7 @@ class _UserProfileState extends State<UserProfile> {
   void showAlertDialog1(BuildContext context){
     showDialog(
       context: context,
-      builder: (BuildContext context)=>UpdateResume(),
+      builder: (BuildContext context)=>UpdateResume(uid),
     );
   }
 

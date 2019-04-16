@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/history_page.dart';
@@ -19,21 +20,37 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   SharedPreferences prefs;
-  var userid;
+  String userid;
+  String userprofile = "";
 
   getdata() async {
     prefs = await SharedPreferences.getInstance();
     userid = prefs.getString("userid");
-    //print(userid);
+    print(userid);
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    getdata();
-    // print(userid);
-    super.initState();
+      getdata();
+    _getUserimag();
   }
+
+  Future<String> _getUserimag() async {
+    print(userid);
+    Dio dio= new Dio();
+    final response = await dio.get("http://onenetwork.ddns.net/api/get_user_details.php?userid="+userid);
+    String ans = response.toString();
+    print(ans);
+    var responseJson = jsonDecode(ans);
+    var image = responseJson['user_details']['profile_pic'];
+    print(responseJson);
+    setState(() {
+      userprofile = image;
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +73,11 @@ class HomePageState extends State<HomePage> {
         child: new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: new Text('Taher M'),
-              accountEmail: new Text('t@gmail.com'),
+              accountName: new Text(userid),
+              accountEmail: new Text('$userid@daiict.ac.in'),
               currentAccountPicture: new CircleAvatar(
                 backgroundColor: Colors.black26,
-                child: new Text('V'),
+                backgroundImage: '$userprofile'==null?  AssetImage("images/logo.jpeg"): NetworkImage('$userprofile'),
               ),
               decoration: new BoxDecoration(color: Colors.blue[300]),
             ),
@@ -68,7 +85,7 @@ class HomePageState extends State<HomePage> {
                 title: new Text('Profile'),
                 leading: Icon(Icons.account_circle),
                 onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext) => UserProfile()))),
+                    builder: (BuildContext) => UserProfile(userid)))),
             new ListTile(
                 title: new Text('Add Post'),
                 leading: new Icon(Icons.edit),
