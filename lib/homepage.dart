@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:login_page/LoginFinal.dart';
 import 'package:login_page/Notification_.dart';
 import 'package:login_page/appliedProject.dart';
 import 'package:login_page/history_page.dart';
@@ -122,7 +123,7 @@ class HomePageState extends State<HomePage> {
                 leading: new Icon(Icons.power_settings_new),
                 onTap: () {
                   Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                    builder: (BuildContext) => LoginPage()));
+                    builder: (BuildContext) => Login1()));
                 }),
           ],
         ),

@@ -71,7 +71,7 @@ class _Login1State extends State<Login1> {
                       controller: useridControl,
                       autocorrect: true,
                       decoration: InputDecoration(
-                          hintText: 'First Name',
+                          hintText: 'User Id',
                           contentPadding:
                           EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           border: OutlineInputBorder(
@@ -90,7 +90,7 @@ class _Login1State extends State<Login1> {
                       autocorrect: true,
                       obscureText: true,
                       decoration: InputDecoration(
-                          hintText: 'Last Name',
+                          hintText: 'Password',
                           contentPadding:
                           EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           border: OutlineInputBorder(

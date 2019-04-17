@@ -18,17 +18,16 @@ class _AcknowledgeState extends State<Acknowledge> {
 
   SharedPreferences prefs;
   var userid;
+
   getdata() async {
     prefs = await SharedPreferences.getInstance();
     userid = prefs.getString("userid");
-    print(widget.project.id);
   }
 
   @override
   void initState() {
-    _getData();
-    print(widget.project.id);
-    print(userid);
+
+    getdata();
     super.initState();
   }
 // List<ProjectDetails> histories = [];
@@ -37,7 +36,7 @@ List<AppliedUser> histories = [];
 Future<String> _sendData(String id, String pid) async {
   Dio d = new Dio();
   
-  String url = "http://onenetwork.ddns.net/api/view_project_details?projectid="+id+"&projectid="+pid;
+  String url = "http://onenetwork.ddns.net/api/view_project_details?userid="+id+"&projectid="+pid;
 
   final response = d.post(url);
   String ans = response.toString();
@@ -93,36 +92,6 @@ Future<String> _sendRejectData(String id, String pid) async {
       return result.toString();
 }
  
-// Future<List<ProjectDetails>> _getData() async {
-    
-//     if(histories.isEmpty){
-//     ProjectDetails temp;
-//     print("hey");
-//     String url = "http://onenetwork.ddns.net/api/view_project_details.php?projectid="+widget.project_id;
-//     var data = await http.get(url);
-//     var jsonData = json.decode(data.body);
-// print("hey");
-//     print(jsonData["applied_user_count"]);
-//         for(int i=0; i < jsonData["applied_user_count"];i++){
-//         temp = new ProjectDetails(
-//           jsonData["project_details"]["id"],
-//           jsonData["project_details"]["title"],
-//           jsonData["project_details"]["description"],
-//           jsonData["project_details"]["creator"],
-//           jsonData["project_details"]["mentor"],
-//           jsonData["creator_name"],
-//           jsonData["mentor_name"],
-//           jsonData["applied_user_names"][i]["applied_student_id"],
-//           jsonData["applied_user_names"][i]["applied_user_name"],
-//           );
-//         histories.add(temp);
-//         // print(jsonData["applied_user_names"][i]["applied_user_name"]);
-//         }
-//     // print(histories.length);
-//     return histories;
-
-//     }
-//   }
 Future<List<AppliedUser>> _getData() async {
     AppliedUser temp;
     String url = "http://onenetwork.ddns.net/api/view_applied_users_for_project.php?projectid="+widget.project.id;
@@ -140,6 +109,8 @@ Future<List<AppliedUser>> _getData() async {
           jsonData["applied_users"][i]["id"],
           widget.project.id
           );
+          print(temp.id);
+          print(userid);
         print('reached');
         histories.add(temp);
         print(temp);
@@ -147,7 +118,23 @@ Future<List<AppliedUser>> _getData() async {
     }
     return histories;
   }
- 
+
+List<ProjectDetails> pdata = [];
+Future<List<ProjectDetails>> _getProjectDetails() async {
+  ProjectDetails pd;
+  String url = "http://onenetwork.ddns.net/api/fetch_specific_project.php?projectid="+widget.project.id;
+  if(pdata.isEmpty){
+    var data = await http.get(url);
+    var jsonData = json.decode(data.body);
+
+    pd = new ProjectDetails(jsonData["project_detail"]["id"], jsonData["project_detail"]["title"], jsonData["project_detail"]["description"], jsonData["project_detail"]["creator_id"], jsonData["project_detail"]["mentor_id"]);
+// print(pd);
+    pdata.add(pd);
+  }
+return pdata;
+}
+
+
   @override
   Widget build(BuildContext context) {
      return Scaffold(
@@ -158,57 +145,80 @@ Future<List<AppliedUser>> _getData() async {
       body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-//remember to uncomment again            
-            // Padding(
-            //   padding:
-            //   const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
-
-              // child: Text(
-              //   widget.project.title,
-              //   style: TextStyle(
-              //     color: Colors.blue,
-              //     fontFamily: 'Montserrat',
-              //     fontWeight: FontWeight.w700,
-              //     fontSize: 20.0
-              //   ),
-              // ),
-            //),
-//             Expanded(
-//               child: FutureBuilder(
-//                 future: _getData(),
-//                 builder: (BuildContext context, AsyncSnapshot snapshot){
-//                   if(snapshot.data == null){
-//                     return Container(
-//                       child: Center(
-//                         child: Text("No Data..."),
-//                       ),
-//                     );
-//                   }
-//                   else{
-// //remember to uncomment again                     
-//                   //   return ListView.builder(
-//                   //     shrinkWrap: true,
-//                   //     itemCount: snapshot.data.length,
-//                   //     itemBuilder: (BuildContext context, int index){
-//                   //         return Container(
-//                   //           child: Column(
-//                   //             children: <Widget>[
-//                   //               Text(snapshot.data[index].title),
-//                   //               Text(snapshot.data[index].description),
-//                   //               Text(snapshot.data[index].creator_name),
-//                   //               Text(snapshot.data[index].mentor_name),
-//                   //             ],
-//                   //           )
-//                   //         );
-//                   //     },
-//                   //   );
-//                   // }
-//                   }
-//                 },
-//               ),
-//             ),
-            
+          // mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[           
+            Expanded(
+              child: FutureBuilder(
+                future: _getProjectDetails(),
+                builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if(snapshot.data == null){
+                    return Container(
+                      child: Center(
+                        child: Text("No Data..."),
+                      ),
+                    );
+                  }
+                  else{                  
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index){
+                          return Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Container(
+                              child: Card(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text("Title",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 20
+                                      ),
+                                    ),
+                                    Text(snapshot.data[index].title,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18
+                                      ),
+                                    ),
+                                    Text("Description",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 20
+                                      ),
+                                    ),
+                                    Text(snapshot.data[index].description,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18
+                                      ),
+                                    ),
+                                    Text("Creator",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 20
+                                      ),
+                                    ),
+                                    // Text(snapshot.data[index].creator_name),
+                                    Text("Mentor",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 20
+                                      ),
+                                    ),
+                                    // Text(snapshot.data[index].mentor_name),
+                                  ],
+                                ),
+                              )
+                            ),
+                          );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
             Expanded(
               child: FutureBuilder(
                 future: _getData(),
@@ -352,12 +362,11 @@ class ProjectDetails {
   final String description;
   final String creator_id;
   final String mentor_id;
-  final String creator_name;
-  final String mentor_name;
-  final String userid;
-  final String username;
+  // final String creator_name;
+  // final String mentor_name;
 
-ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id, this.creator_name, this.mentor_name, this.userid, this.username);
+// ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id, this.creator_name, this.mentor_name);
+ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id,);
 }
 
 class AppliedUser {
@@ -368,11 +377,3 @@ class AppliedUser {
   // final int count;
   AppliedUser(this.user, this.id, this.pid);
 }
-
-// class OProject{
-//   final String notification;
-//   final String id;
-//   final int flag;
-
-//   OProject(this.notification, this.id, this.flag); 
-// }

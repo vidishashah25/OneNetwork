@@ -27,7 +27,6 @@ class _NotifyState extends State<Notify> {
    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
 new GlobalKey<RefreshIndicatorState>();
 
-
   SharedPreferences prefs;
   var userid;
 
