@@ -170,21 +170,23 @@ return pdata;
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text("Title",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 20
-                                      ),
-                                    ),
-                                    Text(snapshot.data[index].title,
+                                    // Text("Title",
+                                    //   style: TextStyle(
+                                    //     color: Colors.blue,
+                                    //     fontSize: 20
+                                    //   ),
+                                    // ),
+                                    Text(snapshot.data[index].title+"\n",
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18
+                                        color: Colors.blue,
+                                        fontSize: 20,
+                                        fontStyle: FontStyle.italic
+
                                       ),
                                     ),
                                     Text("Description",
                                       style: TextStyle(
-                                        color: Colors.blue,
+                                        color: Colors.blue[300],
                                         fontSize: 20
                                       ),
                                     ),
@@ -196,14 +198,14 @@ return pdata;
                                     ),
                                     Text("Creator",
                                       style: TextStyle(
-                                        color: Colors.blue,
+                                        color: Colors.blue[300],
                                         fontSize: 20
                                       ),
                                     ),
                                     // Text(snapshot.data[index].creator_name),
                                     Text("Mentor",
                                       style: TextStyle(
-                                        color: Colors.blue,
+                                        color: Colors.blue[300],
                                         fontSize: 20
                                       ),
                                     ),
