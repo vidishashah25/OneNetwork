@@ -8,7 +8,8 @@ import 'signup.dart';
 import 'package:progress_hud/progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'forgetPassword.dart';
-
+import 'package:splashscreen/splashscreen.dart';
+import 'LoginFinal.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,11 +18,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
 
-      debugShowCheckedModeBanner: false,
-        home: new LoginPage(),
+        debugShowCheckedModeBanner: false,
+        home: new Spash_Screen(),
         theme: new ThemeData(primarySwatch: Colors.blue));
   }
 }
+
+class Spash_Screen extends StatefulWidget {
+  @override
+  _Spash_ScreenState createState() => _Spash_ScreenState();
+}
+
+class _Spash_ScreenState extends State<Spash_Screen> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+
+      child: SplashScreen(
+        seconds: 3,
+        navigateAfterSeconds: Login1(),
+        image: Image(image: AssetImage("images/logo.jpeg"),
+        ),
+        photoSize: 200.0,
+        backgroundColor: Colors.white,
+      ),
+    );
+  }
+}
+
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -48,21 +73,21 @@ class _LoginPageState extends State<LoginPage> {
             "password" : text2,
           }
       );
-       final response = await dio.post("http://onenetwork.ddns.net/api/login/login.php", data: formData);
-       String ans = response.toString();
-       print(ans);
-       var responseJson = jsonDecode(ans);
-       var result= responseJson["error"];
-       print(result);
+      final response = await dio.post("http://onenetwork.ddns.net/api/login/login.php", data: formData);
+      String ans = response.toString();
+      print(ans);
+      var responseJson = jsonDecode(ans);
+      var result= responseJson["error"];
+      print(result);
 
       login=true;
-        if(result=="false"){
-          prefs = await SharedPreferences.getInstance();
-          //print(emailController.text);
-          prefs.setString("userid", emailController.text);
-          prefs.commit();
-          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-        }
+      if(result=="false"){
+        prefs = await SharedPreferences.getInstance();
+        //print(emailController.text);
+        prefs.setString("userid", emailController.text);
+        prefs.commit();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+      }
       return result;
     }
 
@@ -72,33 +97,34 @@ class _LoginPageState extends State<LoginPage> {
 
 
     final imageField= Image(
-        image: AssetImage("images/logo.jpeg"),
-        fit: BoxFit.contain,
-        height: MediaQuery.of(context).size.height/4,
-        width:  MediaQuery.of(context).size.width/2,
+      image: AssetImage("images/logo.jpeg"),
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height/4,
+      width:  MediaQuery.of(context).size.width/2,
     );
 
-    //   final emailField =TextField(
-    //   controller: emailController,
-    //   style: style,
-    //   decoration: InputDecoration(
-    //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-    //       hintText: "Email",
-    //       border:
-    //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    final emailField = TextField(
+      controller: emailController,
+      obscureText: false,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Email",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
-    // );
+    );
 
-    // final passwordField = TextField(
-    //   controller: passwordController,
-    //   obscureText: true,
-    //   style: style,
-    //   decoration: InputDecoration(
-    //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-    //       hintText: "Password",
-    //       border:
-    //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    // );
+    final passwordField = TextField(
+      controller: passwordController,
+      obscureText: true,
+      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Password",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
 
     final loginButon = Material(
       elevation: 5.0,
@@ -109,8 +135,10 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           //Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
-        _getSignin(emailController.text,passwordController.text);
-        
+          _getSignin(emailController.text,passwordController.text);
+          // if(login){
+//          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomePage()));
+          // }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -120,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
 
-  
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -135,41 +163,9 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   imageField,
-                  
-                  TextField(
-                    controller: emailController,
-                    style: style,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Email",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-                  ),
-                  
+                  emailField,
                   SizedBox(height: MediaQuery.of(context).size.width/15),
-
-                  TextField(
-                    controller: passwordController,
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0,color: Colors.black87),                   
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Password",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
-                  ),
-                  
-                  // TextField(
-                  //   controller: passwordController,
-                  //   obscureText: true,
-                  //   style: style,
-                  //   decoration: InputDecoration(
-                  //       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  //       hintText: "Password",
-                  //       border:
-                  //       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-                  // ),
+                  passwordField,
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   loginButon,
                   SizedBox(
@@ -178,15 +174,15 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: MediaQuery.of(context).size.width/50),
                   FlatButton(
                     onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>forgetPass()));
+                      Navigator.push(context, MaterialPageRoute(builder:(context)=>ForgetPass()));
                     },
                     child: Text("Forgot Password ?"),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width/15),
                   FlatButton(
-                      onPressed: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>SignUp()));
-                      },
+                    onPressed: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>SignUp()));
+                    },
                     child: Text("Don't Have an account?  SignUp"),
                   ),
                 ],

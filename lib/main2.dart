@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: MediaQuery.of(context).size.width/50),
                   FlatButton(
                     onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context)=>forgetPass()));
+                    Navigator.push(context, MaterialPageRoute(builder:(context)=>ForgetPass()));
                     },
                     child: Text("Forgot Password ?"),
                   ),

@@ -3,106 +3,119 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:login_page/main.dart';
 
-class forgetPass extends StatefulWidget {
+class ForgetPass extends StatefulWidget {
   @override
-  _forgetPassState createState() => _forgetPassState();
+  _ForgetPassState createState() => _ForgetPassState();
 }
 
-class _forgetPassState extends State<forgetPass> {
-  @override
-  Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-        fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black87);
-    TextEditingController useridController = new TextEditingController();
+class _ForgetPassState extends State<ForgetPass> {
 
-    Future<String> _changepass(String text) async {
+  TextEditingController userid = new TextEditingController();
+  TextStyle style = TextStyle(fontFamily: 'Times New Roman', fontSize: 20.0,color: Colors.blue);
+  final _formKey = GlobalKey<FormState>();
+
+Future<String>_getPass(String userid) async{
       Dio dio = new Dio();
-
-      FormData formData = new FormData.from({
-        "userid": text,
-        //projectid : 12
+      FormData formdata = new FormData.from({
+        "userid":userid,
       });
-      final response = await dio
-          .post("http://onenetwork.ddns.net/api/forgot.php", data: formData);
+
+      final response = await 
+      dio.post("http://onenetwork.ddns.net/api/forgot.php", data: formdata);
+
       String ans = response.toString();
       print(ans);
+
       var responseJson = jsonDecode(ans);
+
       var result = responseJson["error"];
 
       if (result == "false") {
+        print(result);
         Fluttertoast.showToast(
-            msg: "Email has been sent",
+            msg: "Mail has been sent",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIos: 1,
             backgroundColor: Colors.grey,
             textColor: Colors.black87,
-            fontSize: 16.0);
+            fontSize: 16.0
+        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
       }
-      return result;
-    }
+      return result.toString();
+}
+  
 
-    final userid = TextField(
-      controller: useridController,
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "User Id",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    );
 
-    final resetButton = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          _changepass(useridController.text);
-        },
-        child: Text("Reset Password",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Forgot Password"),
+        title: Text("Forget Password"),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(36.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Forgot Password",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat',
-                      fontSize: 40.0,
-                      color: Color(0xff01A0C7)),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width / 5),
-                userid,
-                SizedBox(height: MediaQuery.of(context).size.width / 15),
-                resetButton,
-                SizedBox(
-                  height: 15.0,
-                ),
-              ],
-            ),
-          ),
-        ),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: Builder(
+              builder: (context) => Form(
+                key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
+                          child: TextFormField(
+                          controller: userid,
+                          autocorrect: true,
+                          style: style,
+                          decoration: InputDecoration(
+                            hintText: 'User Id',
+                            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                          ),
+                          
+                          validator: (value){
+                              if(value.isEmpty){
+                                return 'Please enter your Id';
+                              }
+                            },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),
+                        child: Container(
+                         padding: const EdgeInsets.symmetric(
+                           vertical: 16.0, horizontal: 16.0
+                         ),
+                         child: RaisedButton(
+                           color: Color(0xff01A0C7),
+                           onPressed: (){
+                             final form = _formKey.currentState;
+                             if(form.validate()){
+                              _getPass(userid.text);
+                             }
+                           },
+                           padding: const EdgeInsets.all(8.0),
+                           child: Text('Enter',
+                           style: TextStyle(
+                             color:Colors.white,
+                             fontSize: 20,
+                           ),
+                           ),
+                         )
+                        ),
+                      ),
+                    ],
+                  )
+            )
+          )
+        )
+                  
       ),
     );
   }

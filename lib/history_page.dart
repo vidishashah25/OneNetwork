@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_page/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'acknowlege.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -65,6 +64,38 @@ class ViewProjectState extends State<ViewProject> {
       return result.toString();
 }
   
+  Future<String> _sendRejectData(String id, String pid) async {
+  Dio d = new Dio();
+  
+  String url = "http://onenetwork.ddns.net/api/reject_student.php?userid="+id+"&projectid="+pid;
+
+  final response = d.post(url);
+  String ans = response.toString();
+      print(ans);
+
+      var responseJson = jsonDecode(ans);
+
+      var result = responseJson["error"];
+
+      if (result == "false") {
+        print(result);
+        Fluttertoast.showToast(
+            msg: "Reject msg sent",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.black87,
+            fontSize: 16.0
+        );
+      }
+
+      return result.toString();
+}
+  
+
+
+
   Future<List<AppliedUser>> _getData() async {
     if(histories.isEmpty){
     AppliedUser temp;
@@ -103,7 +134,12 @@ class ViewProjectState extends State<ViewProject> {
               const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
               child: Text(
                 widget.project.title,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20.0
+                ),
               ),
             ),
             Padding(
@@ -118,16 +154,59 @@ class ViewProjectState extends State<ViewProject> {
                       child: Card(
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 16.0),
+                              vertical: 16.0),
                           child: Column(
                             children: <Widget>[
                               Expanded(
-                                child: Text(
-                                  widget.project.description+
-                                  "\n Technology: "+widget.project.interest_str+
-                                  "\n Creator: "+widget.project.creator_name),
-                              ),
-                              // Icon(Icons.description)
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                  Text("Description",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18,
+                                        fontFamily: "Montserrat"
+                                      ),
+                                    ),
+                                    Text(widget.project.description,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: "Montserrat"
+                                      ),                                    
+                                    ),
+                                  Text("Creator",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18,
+                                        fontFamily: "Montserrat"
+                                      ),
+                                    ),
+                                    Text(widget.project.creator_name,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: "Montserrat"
+                                      ),                                    
+                                    ),
+
+                                    Text("Mentor",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18,
+                                        fontFamily: "Montserrat"
+                                      ),
+                                    ),
+                                    Text(widget.project.mentor_name,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: "Montserrat"
+                                      ),                                    
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -144,7 +223,7 @@ class ViewProjectState extends State<ViewProject> {
                   if(snapshot.data == null){
                     return Container(
                       child: Center(
-                        child: Text("Loading..."),
+                        child: Text("No Data..."),
                       ),
                     );
                   }
@@ -194,7 +273,7 @@ class ViewProjectState extends State<ViewProject> {
                                         Text(history.user,
                                             style: TextStyle(
                                             fontSize: 18,
-                                            fontFamily: 'Times New Roman',
+                                            fontFamily: 'Montserrat',
                                           ),
                                         ),
                                       ButtonTheme.bar(
@@ -209,7 +288,9 @@ class ViewProjectState extends State<ViewProject> {
                                             FlatButton(
                                               child: const Text('Reject',
                                               style: TextStyle(color: Colors.red)),
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                _sendRejectData(history.id,history.pid);
+                                              },
                                             )
                                           ],
                                         )
@@ -254,7 +335,7 @@ class ViewProjectState extends State<ViewProject> {
                                         Text(history.user,
                                             style: TextStyle(
                                             fontSize: 18,
-                                            fontFamily: 'Times New Roman',
+                                            fontFamily: 'Montserrat',
                                           ),
                                         ),
                                     ]
@@ -273,6 +354,7 @@ class ViewProjectState extends State<ViewProject> {
 
   }
   }
+
 }
 
 class AppliedUser {

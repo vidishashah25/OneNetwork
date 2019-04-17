@@ -56,6 +56,7 @@ class _SignUpState extends State<SignUp> {
       return result.toString();
 
     }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +65,7 @@ class _SignUpState extends State<SignUp> {
       ),
       body: SingleChildScrollView(
           child: Container(
+            color: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: Builder(
               builder: (context) => Form(

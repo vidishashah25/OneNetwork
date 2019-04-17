@@ -1,4 +1,4 @@
-// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -17,13 +17,65 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
 SharedPreferences prefs;
 var userid;
+bool java = false;
+bool php = false;
+bool mysql = false;
+bool ai = false;
+bool ip = false;
+List<String> interest_arr = new List();
+
+
+void onChanged(bool value, String title) {
+  setState(() {
+    switch(title)
+    {
+      case "Java":
+        java = value;
+        break;
+      case "PHP":
+        php = value;
+        break;
+      case "MySQL":
+        mysql = value;
+        break;
+      case "AI":
+        ai = value;
+        break;
+      case "ImageProcessing":
+        ip = value;
+        break;
+    }
+  });
+}
+
+Widget checkbox(String title, bool boolValue)
+{
+  return Container(
+    child: Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Row(
+            children: <Widget>[
+              new Text(title),
+              Checkbox(
+                value: boolValue,
+                onChanged: (bool value) {onChanged(value, title);},
+              )
+            ],
+          )
+        ],
+      ),
+    ),
+  );
+}
+
 
 @override
 void initState(){
   //-> uncomment this when login starts working for @taher
     _getData1();
-    _getdata();
-
     super.initState();
 }
   void _getData1() async{
@@ -33,76 +85,43 @@ void initState(){
 
 Future<String> _postData(String name,String description,String val) async {
       Dio dio = new Dio();
+
+      String url1 = "http://onenetwork.ddns.net/api/post_project.php?userid="+userid+"&title="+name+"&description="+description+"&project_type="+val;
+
+      print(interest_arr.length);
+      for(int i=0;i<interest_arr.length;i++)
+        {
+          //print("vidisha");
+          url1=url1+"&arr[$i]="+interest_arr[i];
+        }
+
+      print(url1);
+
       print(name);
       print(description);
       print(userid);
       print(val);
 
-      // FormData formData = new FormData.from({
-      //   "title": name,
-      //   "description": description,
-      //   "userid": userid,
-      //   "project_type": 102
-      // });
-      // final response = await dio
-      //     .post("http://onenetwork.ddns.net/api/post_project.php", data: formData);
-      // String ans = response.toString();
-      // print(ans);
-      // var responseJson = jsonDecode(ans);
-      // var result = responseJson["error"];
 
-      // if (result == "false") {
-      //   Fluttertoast.showToast(
-      //       msg: "Post has been added",
-      //       toastLength: Toast.LENGTH_SHORT,
-      //       gravity: ToastGravity.CENTER,
-      //       timeInSecForIos: 1,
-      //       backgroundColor: Colors.grey,
-      //       textColor: Colors.black87,
-      //       fontSize: 16.0);
-      // }
-      var result ="nothing";
+       final response = await dio.get(url1.trim());
+       String ans = response.toString();
+       print(ans);
+       var responseJson = jsonDecode(ans);
+       var result = responseJson["error"];
+
+       if (result == "false") {
+         Fluttertoast.showToast(
+             msg: "Post has been added",
+             toastLength: Toast.LENGTH_SHORT,
+             gravity: ToastGravity.CENTER,
+             timeInSecForIos: 1,
+             backgroundColor: Colors.grey,
+             textColor: Colors.black87,
+             fontSize: 16.0);
+       }
+
       return result;
     }
-
-    List<String> l =new List(3);
-    List<String> lname =new List(3);
-    Map<int,String> mp = new Map<int,String>();
-    void _getdata() async{
-        Dio dio = new Dio();
-        final response = await dio.get("http://onenetwork.ddns.net/api/interests.php");
-        String ans = response.toString();
-        var data = jsonDecode(ans);
-
-//print(data["interests"][0]["interests_array"][0]["name"]);
-//instead of 3 put count, Don't worry Pratik will send in api.
-        
-        for(int i=0;i<3;i++){
-          l[i]=data["interests"][0]["interests_array"][i]["id"];
-          lname[i]=data["interests"][0]["interests_array"][i]["name"];
-        }
-          print(l);
-          print(lname);
-    }
-
-
-  List<ProjectType> _getProjectTypes() {
-    List<ProjectType> ptype = [];
-    ProjectType temp;
-    Dio dio = new Dio();
-      var data =
-       dio.get('http://onenetwork.ddns.net/api/get_project_types.php');
-      var jsonData = json.decode(data.toString());
-      print(jsonData);
-      
-      for(var u in jsonData){
-        ProjectType p = ProjectType(u["id"], u["name"]);
-        ptype.add(p);
-      }
-    print(ptype);
-    return ptype;    
-  }
-
 
 
  int _value2 = 0;
@@ -110,25 +129,6 @@ Future<String> _postData(String name,String description,String val) async {
  _value2 = value
  );
 
-Widget makeRadioTiles() {  
-  List<Widget> list = new List<Widget>();
-  // List<ProjectType> ptype = _getProjectTypes();
-  // print(ptype);
-    int val=101;
-      for(int i = 0; i < 2; i++){
-        list.add(new RadioListTile(
-          value: val++,
-          groupValue: _value2,
-          onChanged: _setvalue2,
-          activeColor: Colors.green,
-          controlAffinity: ListTileControlAffinity.trailing,
-          title: new Text('Summer'),
-        ));
-   }
-
-   Column column = new Column(children: list,);
-   return column;
- }
 
 final _formKey = GlobalKey<FormState>();
 final _pd = ProjectData();
@@ -188,7 +188,7 @@ TextEditingController _description = new TextEditingController();
 //Project Technology
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                      child: Text('Technology',
+                      child: Text('Languages',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -196,34 +196,26 @@ TextEditingController _description = new TextEditingController();
                         ),
                       ),
                     ),
-                    CheckboxListTile(
-                      title: const Text('PHP'),
-                      value: _pd.technology[ProjectData.Php],
-                      onChanged: (val){
-                        setState(() {
-                        _pd.technology[ProjectData.Php] = val;
-                        });
-                      },
+
+                    checkbox("Java", java),
+                    checkbox("PHP", php),
+                    checkbox("MySQL", mysql),
+
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                      child: Text('Languages',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Times New Roman'
+                        ),
+                      ),
                     ),
-                    CheckboxListTile(
-                      title: const Text('Java'),
-                      value: _pd.technology[ProjectData.Java],
-                      onChanged: (val){
-                        setState(() {
-                        _pd.technology[ProjectData.Java] = val;
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      title: const Text('AI'),
-                      value: _pd.technology[ProjectData.Ai],
-                      onChanged: (val){
-                        setState(() {
-                        _pd.technology[ProjectData.Ai] = val;
-                        });
-                      },
-                    ),
-//radio button  
+
+                    checkbox("AI", ai),
+                    checkbox("ImageProcessing", ip),
+//radio button
+
                     Container(
                       padding: new EdgeInsets.fromLTRB(3, 20, 20, 20),
                       child: Text('Project Type(Internship)',
@@ -268,6 +260,32 @@ TextEditingController _description = new TextEditingController();
                        onPressed: (){
                          final form = _formKey.currentState;
                          if(form.validate()){
+                           if(java==true)
+                           {
+                             print(java);
+                             interest_arr.add("6");
+                           }
+
+                           if(php==true)
+                           {
+                             interest_arr.add("7");
+
+                           }
+
+                           if(mysql==true)
+                           {
+                             interest_arr.add("8");
+                           }
+
+                           if(ai==true)
+                           {
+                             interest_arr.add("9");
+                           }
+                           if(ip==true)
+                           {
+                             interest_arr.add("10");
+                           }
+                           print(interest_arr);
                            _postData(_title.text,_description.text,_value2.toString());
                            //form.save();
                          } 
