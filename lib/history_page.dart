@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
 
-
 class ViewProject extends StatefulWidget {
   final DataModel project;
   ViewProject(this.project);
@@ -93,9 +92,6 @@ class ViewProjectState extends State<ViewProject> {
       return result.toString();
 }
   
-
-
-
   Future<List<AppliedUser>> _getData() async {
     if(histories.isEmpty){
     AppliedUser temp;

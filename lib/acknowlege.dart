@@ -127,7 +127,12 @@ Future<List<ProjectDetails>> _getProjectDetails() async {
     var data = await http.get(url);
     var jsonData = json.decode(data.body);
 
-    pd = new ProjectDetails(jsonData["project_detail"]["id"], jsonData["project_detail"]["title"], jsonData["project_detail"]["description"], jsonData["project_detail"]["creator_id"], jsonData["project_detail"]["mentor_id"]);
+    pd = new ProjectDetails(
+      jsonData["project_detail"]["id"], 
+      jsonData["project_detail"]["title"], 
+      jsonData["project_detail"]["description"], 
+      jsonData["project_detail"]["creator_id"], 
+      jsonData["project_detail"]["mentor_id"]);
 // print(pd);
     pdata.add(pd);
   }
@@ -170,12 +175,6 @@ return pdata;
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    // Text("Title",
-                                    //   style: TextStyle(
-                                    //     color: Colors.blue,
-                                    //     fontSize: 20
-                                    //   ),
-                                    // ),
                                     Text(snapshot.data[index].title+"\n",
                                     style: TextStyle(
                                         color: Colors.blue,
@@ -251,6 +250,7 @@ return pdata;
   }
   Widget _historyWidget(AppliedUser history) {
     if(history.id == userid){
+      print(history.id);
       return Container(
       margin: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
       child: Card(

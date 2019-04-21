@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:login_page/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:login_page/homepage.dart';
 
 
@@ -12,8 +13,16 @@ class ExamplePage extends StatefulWidget {
 }
 
 class _ExamplePageState extends State<ExamplePage> {
-// final formKey = new GlobalKey<FormState>();
- // final key = new GlobalKey<ScaffoldState>();
+SharedPreferences prefs;
+
+  var userid;
+
+  getdata() async {
+    prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("userid");
+    
+  }
+  
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
   String _searchText = "";
@@ -39,6 +48,7 @@ class _ExamplePageState extends State<ExamplePage> {
 
   @override
   void initState() {
+    getdata();
     this._getNames();
     super.initState();
   }
@@ -118,8 +128,8 @@ class _ExamplePageState extends State<ExamplePage> {
     }
 
     void _getNames() async {
-      // final response = await dio.get('https://swapi.co/api/people');
-      final response = await dio.get('http://onenetwork.ddns.net/api/display_projects.php');
+      String url = "http://onenetwork.ddns.net/api/display_projects.php?userid="+userid;
+      final response = await dio.get(url);
       List tempList = new List();
       for (int i = 0; i < response.data['projects'].length; i++) {
         print(response.data['projects'][i]['project']);
