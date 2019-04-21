@@ -107,7 +107,8 @@ Future<List<AppliedUser>> _getData() async {
         temp = new AppliedUser(
           jsonData["applied_users"][i]["name"],
           jsonData["applied_users"][i]["id"],
-          widget.project.id
+          widget.project.id,
+          jsonData["creator"]
           );
           print(temp.id);
           print(userid);
@@ -132,7 +133,9 @@ Future<List<ProjectDetails>> _getProjectDetails() async {
       jsonData["project_detail"]["title"], 
       jsonData["project_detail"]["description"], 
       jsonData["project_detail"]["creator_id"], 
-      jsonData["project_detail"]["mentor_id"]);
+      jsonData["project_detail"]["mentor_id"],
+      jsonData["creator_name"],
+      jsonData["mentor_name"]);
 // print(pd);
     pdata.add(pd);
   }
@@ -172,45 +175,48 @@ return pdata;
                             padding: EdgeInsets.all(10.0),
                             child: Container(
                               child: Card(
-                                  child: Column(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(15.0),
+                                    child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(snapshot.data[index].title+"\n",
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 20,
-                                        fontStyle: FontStyle.italic
+                                    children: <Widget>[
+                                      Text(snapshot.data[index].title+"\n",
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 20,
+                                          fontStyle: FontStyle.italic
 
+                                        ),
                                       ),
-                                    ),
-                                    Text("Description",
+                                      Text("Description",
+                                        style: TextStyle(
+                                          color: Colors.blue[300],
+                                          fontSize: 20
+                                        ),
+                                      ),
+                                      Text(snapshot.data[index].description,
                                       style: TextStyle(
-                                        color: Colors.blue[300],
-                                        fontSize: 20
+                                          color: Colors.black,
+                                          fontSize: 18
+                                        ),
                                       ),
-                                    ),
-                                    Text(snapshot.data[index].description,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18
+                                      Text("Creator",
+                                        style: TextStyle(
+                                          color: Colors.blue[300],
+                                          fontSize: 20
+                                        ),
                                       ),
-                                    ),
-                                    Text("Creator",
-                                      style: TextStyle(
-                                        color: Colors.blue[300],
-                                        fontSize: 20
+                                      Text(snapshot.data[index].creator_name),
+                                      Text("Mentor",
+                                        style: TextStyle(
+                                          color: Colors.blue[300],
+                                          fontSize: 20
+                                        ),
                                       ),
-                                    ),
-                                    // Text(snapshot.data[index].creator_name),
-                                    Text("Mentor",
-                                      style: TextStyle(
-                                        color: Colors.blue[300],
-                                        fontSize: 20
-                                      ),
-                                    ),
-                                    // Text(snapshot.data[index].mentor_name),
-                                  ],
+                                      Text(snapshot.data[index].mentor_name),
+                                    ],
                                 ),
+                                  ),
                               )
                             ),
                           );
@@ -249,7 +255,7 @@ return pdata;
     );
   }
   Widget _historyWidget(AppliedUser history) {
-    if(history.id == userid){
+    if(history.creator == userid){
       print(history.id);
       return Container(
       margin: EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
@@ -364,11 +370,11 @@ class ProjectDetails {
   final String description;
   final String creator_id;
   final String mentor_id;
-  // final String creator_name;
-  // final String mentor_name;
+  final String creator_name;
+  final String mentor_name;
 
-// ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id, this.creator_name, this.mentor_name);
-ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id,);
+ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id, this.creator_name, this.mentor_name);
+// ProjectDetails(this.id, this.title, this.description, this.creator_id, this.mentor_id,);
 }
 
 class AppliedUser {
@@ -376,6 +382,7 @@ class AppliedUser {
   final String user;
   final String id;
   final String pid;
+  final String creator;
   // final int count;
-  AppliedUser(this.user, this.id, this.pid);
+  AppliedUser(this.user, this.id, this.pid, this.creator);
 }

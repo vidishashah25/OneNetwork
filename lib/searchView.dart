@@ -13,9 +13,27 @@ class ExamplePage extends StatefulWidget {
 }
 
 class _ExamplePageState extends State<ExamplePage> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+new GlobalKey<RefreshIndicatorState>();
 SharedPreferences prefs;
 
   var userid;
+
+  Future<String> _getNames() async {
+      print("hey");
+      String url = "http://onenetwork.ddns.net/api/display_projects.php?userid="+userid;
+      final response = await dio.get(url);
+      List tempList = new List();
+      for (int i = 0; i < response.data['projects'].length; i++) {
+        print(response.data['projects'][i]['project']);
+        tempList.add(response.data['projects'][i]['project']);
+      }
+      setState(() {
+        names = tempList;
+        names.shuffle();
+        filteredNames = names;
+      });
+    }
 
   getdata() async {
     prefs = await SharedPreferences.getInstance();
@@ -48,20 +66,32 @@ SharedPreferences prefs;
 
   @override
   void initState() {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
     getdata();
     this._getNames();
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildBar(context),
-      body: Container(
-        child: _buildList(),
+    return  RefreshIndicator(
+       key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: Scaffold(
+        appBar: _buildBar(context),
+        body: Container(
+          child: _buildList(),
+        ),
+        resizeToAvoidBottomPadding: false,
       ),
-      resizeToAvoidBottomPadding: false,
     );
   }
+    Future<Null> _refresh() {
+    return _getNames().then((histories) {
+      setState(() => histories = histories);
+    });
+  }
+  
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
@@ -127,20 +157,21 @@ SharedPreferences prefs;
       });
     }
 
-    void _getNames() async {
-      String url = "http://onenetwork.ddns.net/api/display_projects.php?userid="+userid;
-      final response = await dio.get(url);
-      List tempList = new List();
-      for (int i = 0; i < response.data['projects'].length; i++) {
-        print(response.data['projects'][i]['project']);
-        tempList.add(response.data['projects'][i]['project']);
-      }
-      setState(() {
-        names = tempList;
-        names.shuffle();
-        filteredNames = names;
-      });
-    }
+    // void _getNames() async {
+    //   print("hey");
+    //   String url = "http://onenetwork.ddns.net/api/display_projects.php?userid="+userid;
+    //   final response = await dio.get(url);
+    //   List tempList = new List();
+    //   for (int i = 0; i < response.data['projects'].length; i++) {
+    //     print(response.data['projects'][i]['project']);
+    //     tempList.add(response.data['projects'][i]['project']);
+    //   }
+    //   setState(() {
+    //     names = tempList;
+    //     names.shuffle();
+    //     filteredNames = names;
+    //   });
+    // }
 
   }
 
